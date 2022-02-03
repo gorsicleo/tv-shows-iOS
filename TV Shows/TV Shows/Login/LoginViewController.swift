@@ -3,40 +3,53 @@
 //  TV Shows
 //
 //  Created by Leo Goršić on 02.02.2022..
-//
-
-import Foundation
 
 import UIKit
 
-class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController {
     
-    var numberOfClicks = 0
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var flashingColorView: UIView!
+    // MARK: - Private Properties -
     
-    @IBAction func touchUpAction(_ sender: Any) {
-        numberOfClicks += 1
-        titleLabel.text = String(numberOfClicks)
-        changeRectangleColor(for: numberOfClicks)
-    }
+    private var numberOfClicks = 0
     
-    func changeRectangleColor(for number: Int) {
-        let color: UIColor
-        
-        if number % 2 == 0 {
-            color = UIColor.cyan
-        } else {
-            color = UIColor.magenta
-        }
-        
-        flashingColorView.backgroundColor = color
-    }
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var flashingColorView: UIView!
+    
+    // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //initializing ui components
+        setUpUI()
+    }
+}
+
+// MARK: - Extensions -
+
+// MARK: - Setup UI -
+
+private extension LoginViewController {
+    
+    func setUpUI() {
+        setUpTitle()
+        setUpView()
+    }
+    
+    func setUpTitle() {
         titleLabel.text = String(numberOfClicks)
+    }
+    
+    func setUpView() {
         flashingColorView.backgroundColor = UIColor.cyan
+    }
+}
+
+// MARK: - IBAction -
+
+private extension LoginViewController {
+    
+    @IBAction func incrementAction() {
+        numberOfClicks += 1
+        titleLabel.text = String(numberOfClicks)
+        flashingColorView.backgroundColor =  numberOfClicks % 2 == 0 ? .magenta : .cyan
     }
 }

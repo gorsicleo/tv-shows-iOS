@@ -23,7 +23,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Increment" buttonSize="large"/>
                                 <connections>
-                                    <action selector="touchUpAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="nk6-Xw-SSf"/>
+                                    <action selector="incrementAction" destination="Y6W-OH-hqX" eventType="touchUpInside" id="Y2L-qd-8xM"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" highlighted="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gv5-b2-GG6">
