@@ -17,13 +17,22 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
     
-    
     // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
         addGestureRecognier()
+        
+        #if DEBUG
+        emailTextField.text = "marko.cupic@fer.hr"
+        passwordTextField.text = "supermarko"
+        #endif
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setUpCornerRadius()
     }
 }
 
@@ -68,7 +77,6 @@ private extension LoginViewController {
         )
     }
     
-    
     func setUpRememberMeButton() {
         rememberMeButton.setImage(Constants.Buttons.rememberMeButtonUnchecked, for: .normal)
         rememberMeButton.setImage(Constants.Buttons.rememberMeButtonChecked, for: .selected)
@@ -80,10 +88,9 @@ private extension LoginViewController {
     }
     
     func setUpLoginButton() {
-        loginButton.isEnabled = false
-        loginButton.layer.cornerRadius = Constants.Buttons.buttonCorberRadius
         setUpLoginButtonBackgroundColor()
         setUpLoginButtonTextColor()
+        loginButton.isEnabled = false
     }
     
     func setUpLoginButtonBackgroundColor() {
@@ -96,10 +103,9 @@ private extension LoginViewController {
         loginButton.setTitleColor(Constants.Colors.mainRedColor, for: .normal)
     }
 
-    
     func checkInputValidity() {
-        guard let emailFieldInput = emailTextField.text else {return}
-        guard let passwordFieldInput = passwordTextField.text else {return}
+        guard let emailFieldInput = emailTextField.text else { return }
+        guard let passwordFieldInput = passwordTextField.text else { return }
 
         loginButton.isEnabled = emailFieldInput.count > 0 && passwordFieldInput.count > 0 ? true : false
     }
@@ -112,6 +118,10 @@ private extension LoginViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    func setUpCornerRadius() {
+        loginButton.layer.cornerRadius = Constants.Buttons.buttonCornerRadius
+    }
 }
 
 // MARK: - IBAction -
@@ -120,19 +130,18 @@ private extension LoginViewController {
     
     @IBAction func passwordVisibilityAction() {
         passwordTextField.isSecureTextEntry.toggle()
-        passwordVisibilityButton.isSelected = !passwordVisibilityButton.isSelected
+        passwordVisibilityButton.isSelected.toggle()
     }
     
-    // Throws exception when sender is omitted!
-    @IBAction func rememberMe(_ sender: UIButton) {
-        rememberMeButton.isSelected = !rememberMeButton.isSelected
+    @IBAction func rememberMeAction() {
+        rememberMeButton.isSelected.toggle()
     }
     
-    @IBAction func emailFieldValueChanged(_ sender: Any) {
+    @IBAction func emailFieldValueChangeAction() {
         checkInputValidity()
     }
     
-    @IBAction func passwordFieldValueCahnged(_ sender: Any) {
+    @IBAction func passwordFieldValueChangeAction() {
         checkInputValidity()
     }
 }

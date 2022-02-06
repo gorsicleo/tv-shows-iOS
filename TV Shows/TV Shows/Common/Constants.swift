@@ -15,7 +15,7 @@ enum Constants {
         static let visibilityDisabled = UIImage(named: "VisibilityIconDisabled")
         static let rememberMeButtonUnchecked = UIImage(named: "ic-checkbox-unselected")
         static let rememberMeButtonChecked = UIImage(named: "ic-checkbox-selected")
-        static let buttonCorberRadius = 18.0
+        static let buttonCornerRadius = 18.0
     }
     
     // MARK: - Colors-
@@ -23,6 +23,6 @@ enum Constants {
     enum Colors {
         static let mainRedColor = UIColor(rgb: 0x800000)
         static let disabledMainColor = UIColor(rgb: 0xaf4141)
-        static let disabledTitleColor = UIColor(rgb: 0xcccccc)
+        static let disabledTitleColor = UIColor(rgb: 0xc4c4c4)
     }
 }

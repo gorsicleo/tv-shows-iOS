@@ -83,7 +83,7 @@
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                                                                         <connections>
-                                                                            <action selector="emailFieldValueChanged:" destination="DlN-OE-Wv6" eventType="editingChanged" id="xwD-Ey-shJ"/>
+                                                                            <action selector="emailFieldValueChangeAction" destination="DlN-OE-Wv6" eventType="editingChanged" id="oKO-J3-Anj"/>
                                                                         </connections>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0tu-fC-g8m" userLabel="WhiteBar">
@@ -120,7 +120,7 @@
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                                                 <connections>
-                                                                                    <action selector="passwordFieldValueCahnged:" destination="DlN-OE-Wv6" eventType="editingChanged" id="mUk-hv-CYr"/>
+                                                                                    <action selector="passwordFieldValueChangeAction" destination="DlN-OE-Wv6" eventType="editingChanged" id="2IH-wn-kR8"/>
                                                                                 </connections>
                                                                             </textField>
                                                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F4J-Ob-Prz">
@@ -173,7 +173,7 @@
                                                                 </state>
                                                                 <state key="selected" image="ic-checkbox-selected"/>
                                                                 <connections>
-                                                                    <action selector="rememberMe:" destination="DlN-OE-Wv6" eventType="touchUpInside" id="6IE-70-44l"/>
+                                                                    <action selector="rememberMeAction" destination="DlN-OE-Wv6" eventType="touchUpInside" id="rEq-rA-rwy"/>
                                                                 </connections>
                                                             </button>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remember me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQC-1d-dRr">
