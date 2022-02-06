@@ -17,22 +17,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="splash-top-right" translatesAutoresizingMaskIntoConstraints="NO" id="e6E-qi-oiN">
-                                <rect key="frame" x="188" y="44" width="202" height="266"/>
+                                <rect key="frame" x="188" y="0.0" width="202" height="266"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="logo-white" translatesAutoresizingMaskIntoConstraints="NO" id="OC7-cd-IdW">
                                 <rect key="frame" x="114" y="403" width="162" height="38"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="splash-top-left" translatesAutoresizingMaskIntoConstraints="NO" id="46g-KP-cYa">
-                                <rect key="frame" x="0.0" y="44" width="140" height="100"/>
+                                <rect key="frame" x="0.0" y="0.0" width="140" height="100"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.50196078431372548" green="0.0" blue="0.0" alpha="0.7468959263392857" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="e6E-qi-oiN" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="0Jg-FP-8V7"/>
+                            <constraint firstItem="e6E-qi-oiN" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="0Jg-FP-8V7"/>
                             <constraint firstItem="OC7-cd-IdW" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="8he-tT-5hU"/>
-                            <constraint firstItem="46g-KP-cYa" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="CRU-B1-tHc"/>
-                            <constraint firstItem="e6E-qi-oiN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Ia6-Zg-B1d"/>
+                            <constraint firstItem="46g-KP-cYa" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="CRU-B1-tHc"/>
+                            <constraint firstItem="e6E-qi-oiN" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Ia6-Zg-B1d"/>
                             <constraint firstItem="46g-KP-cYa" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="bch-he-wM2"/>
                             <constraint firstItem="OC7-cd-IdW" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="r1x-7s-63X"/>
                         </constraints>

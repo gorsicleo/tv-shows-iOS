@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class CustomButton: UIButton {
+final class CustomButton: UIButton {
     
     enum ButtonState {
         case normal

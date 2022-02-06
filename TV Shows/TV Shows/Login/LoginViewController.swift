@@ -23,8 +23,8 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
+        addGestureRecognier()
     }
-    
 }
 
 // MARK: - Extensions -
@@ -81,7 +81,7 @@ private extension LoginViewController {
     
     func setUpLoginButton() {
         loginButton.isEnabled = false
-        loginButton.layer.cornerRadius = 18
+        loginButton.layer.cornerRadius = Constants.Buttons.buttonCorberRadius
         setUpLoginButtonBackgroundColor()
         setUpLoginButtonTextColor()
     }
@@ -104,7 +104,14 @@ private extension LoginViewController {
         loginButton.isEnabled = emailFieldInput.count > 0 && passwordFieldInput.count > 0 ? true : false
     }
     
+    func addGestureRecognier() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
     
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
 // MARK: - IBAction -
@@ -116,7 +123,7 @@ private extension LoginViewController {
         passwordVisibilityButton.isSelected = !passwordVisibilityButton.isSelected
     }
     
-    // Iz nekog razloga baca exception kad funkcija ne prima sendera
+    // Throws exception when sender is omitted!
     @IBAction func rememberMe(_ sender: UIButton) {
         rememberMeButton.isSelected = !rememberMeButton.isSelected
     }
