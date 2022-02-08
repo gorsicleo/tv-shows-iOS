@@ -5,6 +5,7 @@
 //  Created by Leo Goršić on 02.02.2022..
 
 import UIKit
+import Alamofire
 
 final class LoginViewController: UIViewController {
     
@@ -16,6 +17,10 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var passwordVisibilityButton: UIButton!
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
+    
+    
+    
+    
     
     
     // MARK: - ViewController Life Cycle
@@ -167,7 +172,40 @@ private extension LoginViewController {
         checkInputValidity()
     }
     
-    @IBAction func loginButtonAction(_ sender: Any) {
+    func switchScreen() {
+        print("Mijenjam ekran")
         performSegue(withIdentifier: "goToHome", sender: self)
+    }
+    
+    @IBAction func loginButtonAction(_ sender: Any) {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        let params: [String: String] = [
+            "email": email,
+            "password": password,
+            "password_confirmation": password
+        ]
+        
+        AF
+            .request(
+                "https://tv-shows.infinum.academy/users/sign_in",
+                method: .post,
+                parameters: params,
+                encoder: JSONParameterEncoder.default
+            )
+            .validate()
+            .responseJSON(completionHandler: { response in
+                switch response.result {
+                case .failure(let error):
+                    print (error)
+                case .success(let body):
+                    print ("Pocetak error")
+                    self.switchScreen()
+                    print (body)
+                }
+
+
+            })
+//        performSegue(withIdentifier: "goToHome", sender: self)
     }
 }
