@@ -17,6 +17,7 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
     
+    
     // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
@@ -44,6 +45,17 @@ final class LoginViewController: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
+    
+    func segueButtonPressed(_ sender: Any) {
+            performSegue(withIdentifier: "goToHome", sender: self)
+        }
+        
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == "goToHome" {
+                guard let vc = segue.destination as? HomeViewController else { return }
+                
+            }
+        }
 }
 
 // MARK: - Extensions -
@@ -153,5 +165,9 @@ private extension LoginViewController {
     
     @IBAction func passwordFieldValueChangeAction() {
         checkInputValidity()
+    }
+    
+    @IBAction func loginButtonAction(_ sender: Any) {
+        performSegue(withIdentifier: "goToHome", sender: self)
     }
 }

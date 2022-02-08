@@ -207,6 +207,9 @@
                                                                 <state key="normal" title="Login">
                                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </state>
+                                                                <connections>
+                                                                    <action selector="loginButtonAction:" destination="DlN-OE-Wv6" eventType="touchUpInside" id="PVt-M5-1lr"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -279,11 +282,22 @@
                         <outlet property="passwordVisibilityButton" destination="F4J-Ob-Prz" id="Oyh-7L-wd4"/>
                         <outlet property="registerButton" destination="iQX-Ym-9zV" id="1WP-ny-fzS"/>
                         <outlet property="rememberMeButton" destination="eYj-IE-dQ7" id="Yha-E9-dWm"/>
+                        <segue destination="vgH-Ml-apu" kind="show" identifier="goToHome" id="c7I-Jr-Uys"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ydh-fE-2rH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="750.76923076923072" y="71.090047393364927"/>
+        </scene>
+        <!--Home-->
+        <scene sceneID="kB4-BQ-2gF">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Home" referencedIdentifier="Home" id="vgH-Ml-apu" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Udv-HQ-kui"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0uV-nf-xW6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1549" y="36"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="IpL-42-Ntx">
