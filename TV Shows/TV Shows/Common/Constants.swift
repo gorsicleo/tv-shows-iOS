@@ -25,4 +25,14 @@ enum Constants {
         static let disabledMainColor = UIColor(rgb: 0xaf4141)
         static let disabledTitleColor = UIColor(rgb: 0xc4c4c4)
     }
+    
+    // MARK: - Alert titles -
+    enum AlertTitles {
+        static let loginAlertTitle = "Login failed"
+    }
+    
+    // MARK: - Alert messages -
+    enum AlertMessages {
+        static let loginAlertMessage = "Invalid login credentials"
+    }
 }

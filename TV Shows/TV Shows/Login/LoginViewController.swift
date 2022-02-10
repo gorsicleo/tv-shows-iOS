@@ -6,6 +6,7 @@
 
 import UIKit
 import Alamofire
+import SVProgressHUD
 
 final class LoginViewController: UIViewController {
     
@@ -173,7 +174,6 @@ private extension LoginViewController {
     }
     
     func switchScreen() {
-        print("Mijenjam ekran")
         performSegue(withIdentifier: "goToHome", sender: self)
     }
     
@@ -183,29 +183,47 @@ private extension LoginViewController {
         let params: [String: String] = [
             "email": email,
             "password": password,
-            "password_confirmation": password
         ]
         
-        AF
-            .request(
-                "https://tv-shows.infinum.academy/users/sign_in",
-                method: .post,
-                parameters: params,
-                encoder: JSONParameterEncoder.default
-            )
-            .validate()
-            .responseJSON(completionHandler: { response in
-                switch response.result {
-                case .failure(let error):
-                    print (error)
-                case .success(let body):
-                    print ("Pocetak error")
-                    self.switchScreen()
-                    print (body)
-                }
-
-
-            })
-//        performSegue(withIdentifier: "goToHome", sender: self)
+        sendApiCall(endPoint: .userLogin, params: params)
     }
 }
+
+// MARK: - API CALL -
+
+private extension LoginViewController {
+    
+    func sendApiCall(endPoint : EndpointItem, params: Parameters?) {
+        SVProgressHUD.show()
+        APIManager
+            .shared()
+            .call(type: endPoint, params: params,responseType: UserResponse.self) {
+                response in
+                SVProgressHUD.dismiss()
+                switch response.result {
+                case .success(let payload) :
+                    guard let headers = response.response?.headers.dictionary else { return }
+                    self.handleSuccesfulLogin(for: payload.user,headers: headers)
+                    break;
+                case .failure(let error) :
+                    self.handleFailedLogin(error)
+                    break;
+                }
+        }
+    }
+    
+    func handleSuccesfulLogin(for user: User, headers: [String: String]) {
+        guard let authInfo = try? AuthInfo(headers: headers) else {
+            SVProgressHUD.showError(withStatus: "Missing headers")
+            return
+        }
+        SVProgressHUD.showSuccess(withStatus: "Login successful")
+        switchScreen()
+    }
+    
+    func handleFailedLogin(_ error: AFError) {
+        SVProgressHUD.showError(withStatus: "Login failed: Please check your email and password.")
+    }
+}
+
+
