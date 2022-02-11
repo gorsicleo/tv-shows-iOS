@@ -13,7 +13,6 @@ enum EndpointItem {
     
     case userLogin
     case userRegister
-    
 }
 
 // MARK: - Extensions -

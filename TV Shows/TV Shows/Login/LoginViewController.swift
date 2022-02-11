@@ -19,11 +19,6 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
     
-    
-    
-    
-    
-    
     // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
@@ -54,14 +49,8 @@ final class LoginViewController: UIViewController {
     
     func segueButtonPressed(_ sender: Any) {
             performSegue(withIdentifier: "goToHome", sender: self)
-        }
-        
-        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if segue.identifier == "goToHome" {
-                guard let vc = segue.destination as? HomeViewController else { return }
-                
-            }
-        }
+    }
+    
 }
 
 // MARK: - Extensions -
@@ -187,6 +176,19 @@ private extension LoginViewController {
         
         sendApiCall(endPoint: .userLogin, params: params)
     }
+    
+    @IBAction func registerButtonAction(_ sender: Any) {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        let params: [String: String] = [
+            "email": email,
+            "password": password,
+            "password_confirmation": password
+        ]
+        
+        sendApiCall(endPoint: .userRegister, params: params)
+    }
+    
 }
 
 // MARK: - API CALL -
@@ -203,26 +205,60 @@ private extension LoginViewController {
                 switch response.result {
                 case .success(let payload) :
                     guard let headers = response.response?.headers.dictionary else { return }
-                    self.handleSuccesfulLogin(for: payload.user,headers: headers)
+                    switch endPoint {
+                    case .userLogin:
+                        self.handleSuccesfulLogin(for: payload.user,headers: headers)
+                        break
+                    case .userRegister:
+                        self.handleSuccesfulRegister(for: payload.user, headers: headers)
+                        break
+                    }
                     break;
                 case .failure(let error) :
-                    self.handleFailedLogin(error)
-                    break;
+                    switch endPoint {
+                    case .userLogin:
+                        self.handleFailedLogin(error)
+                        break;
+                    case .userRegister:
+                        self.handleFailedRegister(error)
+                        break;
+                    }
+                    break
+                    
                 }
         }
     }
+}
+    
+    // MARK: - API RESPONSE HANDLERS -
+
+private extension LoginViewController {
     
     func handleSuccesfulLogin(for user: User, headers: [String: String]) {
-        guard let authInfo = try? AuthInfo(headers: headers) else {
-            SVProgressHUD.showError(withStatus: "Missing headers")
+        //In future for AuthInfo
+        guard let _ = try? AuthInfo(headers: headers) else {
+            SVProgressHUD.showError(withStatus: Constants.AlertMessages.missingHeaders)
             return
         }
-        SVProgressHUD.showSuccess(withStatus: "Login successful")
+        SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.loginSuccesful)
         switchScreen()
     }
     
+    func handleSuccesfulRegister(for user: User, headers: [String: String]) {
+        //In future for AuthInfo
+        guard let _ = try? AuthInfo(headers: headers) else {
+            SVProgressHUD.showError(withStatus: Constants.AlertMessages.missingHeaders)
+            return
+        }
+        SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.resgisterSuccesful)
+    }
+    
     func handleFailedLogin(_ error: AFError) {
-        SVProgressHUD.showError(withStatus: "Login failed: Please check your email and password.")
+        SVProgressHUD.showError(withStatus: Constants.AlertMessages.loginFailed)
+    }
+    
+    func handleFailedRegister(_ error: AFError) {
+        SVProgressHUD.showError(withStatus: Constants.AlertMessages.registerFailed)
     }
 }
 
