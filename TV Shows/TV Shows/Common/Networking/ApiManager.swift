@@ -56,5 +56,4 @@ final class APIManager {
                 response in handler(response)
             }
         }
-    
 }

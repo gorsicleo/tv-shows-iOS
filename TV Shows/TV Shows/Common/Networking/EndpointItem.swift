@@ -56,5 +56,4 @@ extension EndpointItem: EndPointType {
             return JSONEncoding.default
         }
     }
-    
 }

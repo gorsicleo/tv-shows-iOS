@@ -50,14 +50,13 @@ final class LoginViewController: UIViewController {
     func segueButtonPressed(_ sender: Any) {
             performSegue(withIdentifier: "goToHome", sender: self)
     }
-    
 }
 
 // MARK: - Extensions -
 
-// MARK: - Setup UI -
-
 private extension LoginViewController {
+    
+    // MARK: - Setup UI -
     
     func setUpUI() {
         setUpTextFields()
@@ -191,7 +190,7 @@ private extension LoginViewController {
     
 }
 
-// MARK: - API CALL -
+// MARK: - API Call -
 
 private extension LoginViewController {
     
@@ -224,13 +223,12 @@ private extension LoginViewController {
                         break;
                     }
                     break
-                    
                 }
         }
     }
 }
     
-    // MARK: - API RESPONSE HANDLERS -
+    // MARK: - API Response Handlers -
 
 private extension LoginViewController {
     
@@ -261,5 +259,3 @@ private extension LoginViewController {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.registerFailed)
     }
 }
-
-

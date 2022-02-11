@@ -40,5 +40,4 @@ struct AuthInfo: Codable {
             return [:]
         }
     }
-
 }
