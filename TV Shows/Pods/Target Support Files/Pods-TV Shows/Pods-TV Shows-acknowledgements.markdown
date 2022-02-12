@@ -1,6 +1,7 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
+<<<<<<< HEAD
 ## Alamofire
 
 Copyright (c) 2014-2021 Alamofire Software Foundation (http://alamofire.org/)
@@ -24,6 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+=======
+>>>>>>> main
 ## SVProgressHUD
 
 MIT License

@@ -1,2 +1,5 @@
+<<<<<<< HEAD
 ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework
+=======
+>>>>>>> main
 ${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework
