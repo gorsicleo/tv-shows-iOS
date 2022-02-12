@@ -8,6 +8,10 @@ import UIKit
 import Alamofire
 import SVProgressHUD
 
+enum LoginNavigationOption {
+    case home
+}
+
 final class LoginViewController: UIViewController {
     
     // MARK: - Private Properties -
@@ -18,6 +22,7 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var passwordVisibilityButton: UIButton!
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
+
     
     // MARK: - ViewController Life Cycle
     
@@ -41,15 +46,12 @@ final class LoginViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
-    
-    func segueButtonPressed(_ sender: Any) {
-            performSegue(withIdentifier: "goToHome", sender: self)
-    }
+
 }
 
 // MARK: - Extensions -
@@ -161,31 +163,16 @@ private extension LoginViewController {
         checkInputValidity()
     }
     
-    func switchScreen() {
-        performSegue(withIdentifier: "goToHome", sender: self)
-    }
-    
     @IBAction func loginButtonAction(_ sender: Any) {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
-        let params: [String: String] = [
-            "email": email,
-            "password": password,
-        ]
-        
-        sendApiCall(endPoint: .userLogin, params: params)
+        sendApiCallLogin(router: Router.login(email: email, password: password))
     }
     
     @IBAction func registerButtonAction(_ sender: Any) {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
-        let params: [String: String] = [
-            "email": email,
-            "password": password,
-            "password_confirmation": password
-        ]
-        
-        sendApiCall(endPoint: .userRegister, params: params)
+        sendApiCallRegister(router: Router.register(email: email, password: password))
     }
     
 }
@@ -194,38 +181,46 @@ private extension LoginViewController {
 
 private extension LoginViewController {
     
-    func sendApiCall(endPoint : EndpointItem, params: Parameters?) {
+    func sendApiCallLogin(router: Router) {
         SVProgressHUD.show()
         APIManager
-            .shared()
-            .call(type: endPoint, params: params,responseType: UserResponse.self) {
-                response in
+            .shared
+            .call(router: router,responseType: UserResponse.self) { [weak self] response in
                 SVProgressHUD.dismiss()
+                guard let self = self else { return }
+                
                 switch response.result {
                 case .success(let payload) :
                     guard let headers = response.response?.headers.dictionary else { return }
-                    switch endPoint {
-                    case .userLogin:
-                        self.handleSuccesfulLogin(for: payload.user,headers: headers)
-                        break
-                    case .userRegister:
-                        self.handleSuccesfulRegister(for: payload.user, headers: headers)
-                        break
-                    }
+                    self.handleSuccesfulLogin(for: payload.user,headers: headers)
                     break;
                 case .failure(let error) :
-                    switch endPoint {
-                    case .userLogin:
-                        self.handleFailedLogin(error)
-                        break;
-                    case .userRegister:
-                        self.handleFailedRegister(error)
-                        break;
-                    }
+                    self.handleFailedLogin(error)
                     break
                 }
         }
     }
+    
+    func sendApiCallRegister(router: Router) {
+        SVProgressHUD.show()
+        APIManager
+            .shared
+            .call(router: router,responseType: UserResponse.self) { [weak self] response in
+                SVProgressHUD.dismiss()
+                guard let self = self else { return }
+            
+                switch response.result {
+                case .success(let payload) :
+                    guard let headers = response.response?.headers.dictionary else { return }
+                    self.handleSuccesfulRegister(for: payload.user,headers: headers)
+                    break;
+                case .failure(let error) :
+                    self.handleFailedRegister(error)
+                    break
+                }
+        }
+    }
+
 }
     
     // MARK: - API Response Handlers -
@@ -233,17 +228,15 @@ private extension LoginViewController {
 private extension LoginViewController {
     
     func handleSuccesfulLogin(for user: User, headers: [String: String]) {
-        //In future for AuthInfo
         guard let _ = try? AuthInfo(headers: headers) else {
             SVProgressHUD.showError(withStatus: Constants.AlertMessages.missingHeaders)
             return
         }
         SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.loginSuccesful)
-        switchScreen()
+        navigate(to: .home)
     }
     
     func handleSuccesfulRegister(for user: User, headers: [String: String]) {
-        //In future for AuthInfo
         guard let _ = try? AuthInfo(headers: headers) else {
             SVProgressHUD.showError(withStatus: Constants.AlertMessages.missingHeaders)
             return
@@ -257,5 +250,19 @@ private extension LoginViewController {
     
     func handleFailedRegister(_ error: AFError) {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.registerFailed)
+    }
+}
+
+// MARK: - Navigation -
+
+extension LoginViewController {
+    
+    func navigate(to navigationOption: LoginNavigationOption) {
+        switch navigationOption {
+        case .home:
+            let storyboard = UIStoryboard(name: "Home", bundle: .main)
+            let homeViewController = storyboard.instantiateViewController(withIdentifier: "Home")
+            navigationController?.pushViewController(homeViewController, animated: true)
+        }
     }
 }
