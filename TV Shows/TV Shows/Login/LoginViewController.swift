@@ -228,10 +228,11 @@ private extension LoginViewController {
 private extension LoginViewController {
     
     func handleSuccesfulLogin(for user: User, headers: [String: String]) {
-        guard let _ = try? AuthInfo(headers: headers) else {
+        guard let authInfo = try? AuthInfo(headers: headers) else {
             SVProgressHUD.showError(withStatus: Constants.AlertMessages.missingHeaders)
             return
         }
+        APIManager.shared.authInfo = authInfo
         SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.loginSuccesful)
         navigate(to: .home)
     }
