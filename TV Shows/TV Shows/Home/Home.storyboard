@@ -12,7 +12,6 @@
         <!--Shows-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="Home" id="Y6W-OH-hqX" customClass="HomeViewController" customModule="TV_Shows" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -62,6 +61,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="showImage" destination="drK-hu-KWE" id="nJf-z7-lAb"/>
+                                            <outlet property="showImageContainer" destination="yVU-ay-Gg2" id="awL-hO-BSE"/>
                                             <outlet property="showTitle" destination="peG-0g-xDM" id="JmI-mb-BD3"/>
                                         </connections>
                                     </tableViewCell>
@@ -83,6 +83,7 @@
                         <outlet property="tableView" destination="79b-84-mcZ" id="fXf-dN-25f"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="902.89855072463774" y="81.696428571428569"/>
         </scene>

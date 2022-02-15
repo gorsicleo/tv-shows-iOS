@@ -12,6 +12,7 @@ import Alamofire
 
 final class ShowTableViewCell: UITableViewCell {
     
+    @IBOutlet private weak var showImageContainer: UIView!
     @IBOutlet private weak var showImage: UIImageView!
     @IBOutlet private weak var showTitle: UILabel!
     
@@ -20,9 +21,22 @@ final class ShowTableViewCell: UITableViewCell {
         setUpTitleLabel(title: show.title)
     }
     
+//    func removeSpinner() {
+//        if let spinner = showImageContainer?.viewWithTag(1) {
+//            spinner.removeFromSuperview()
+//            print("Removed")
+//        } else {print("Not removed")}
+//    }
+    
     func setUpImageView(url: String) {
         guard let showImageURL = URL(string: url) else { return }
+//        let spinner = UIActivityIndicatorView()
+//        spinner.center = showImageContainer.center
+//        spinner.tag = 1
+//        spinner.startAnimating()
+//        showImageContainer.addSubview(spinner)
         showImage.loadImageFromNetwork(url: showImageURL)
+//        removeSpinner()
     }
     
     func setUpTitleLabel(title: String) {
@@ -36,12 +50,27 @@ final class ShowTableViewCell: UITableViewCell {
 }
 
 extension UIImageView {
+    func showSpinner() {
+        let spinner = UIActivityIndicatorView()
+        spinner.tag = 1
+        spinner.center = self.center
+        spinner.startAnimating()
+        self.addSubview(spinner)
+    }
+    
+    func dismissSpinner() {
+        if let spinnerView = self.viewWithTag(1) {
+                spinnerView.removeFromSuperview()
+        }
+    }
     func loadImageFromNetwork(url: URL) {
+        showSpinner()
         DispatchQueue
             .global()
             .async { [weak self] in
                 if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async { self?.image = image }
+                    DispatchQueue.main.async { self?.image = image
+                        self?.dismissSpinner() }
                 }
             }
     }
