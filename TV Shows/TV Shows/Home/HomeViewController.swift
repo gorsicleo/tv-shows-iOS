@@ -10,18 +10,17 @@ import Alamofire
 
 final class ShowTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var showImage: UIImageView!
+    @IBOutlet private weak var showImage: UIImageView!
+    @IBOutlet private weak var showTitle: UILabel!
     
-    @IBOutlet weak var showTitle: UILabel!
-    
-    func setUpCell(show: Show) {
+    func setUpCellUI(for show: Show) {
         setUpImageView(url: show.imageURL ?? "")
         setUpTitleLabel(title: show.title)
     }
     
     func setUpImageView(url: String) {
         guard let showImageURL = URL(string: url) else { return }
-        showImage.load(url: showImageURL)
+        showImage.loadImageFromNetwork(url: showImageURL)
     }
     
     func setUpTitleLabel(title: String) {
@@ -31,16 +30,14 @@ final class ShowTableViewCell: UITableViewCell {
 }
 
 extension UIImageView {
-    func load(url: URL) {
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
+    func loadImageFromNetwork(url: URL) {
+        DispatchQueue
+            .global()
+            .async { [weak self] in
+                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                    DispatchQueue.main.async { self?.image = image }
                 }
             }
-        }
     }
 }
 
@@ -74,25 +71,21 @@ final class HomeViewController : UIViewController {
         
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        //        setUpCornerRadius()
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        //        setUpCornerRadius()
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
         navigationController?.navigationBar.prefersLargeTitles = true
-        
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
-    
-    
 }
 
 // MARK: - Extensions -
@@ -114,7 +107,6 @@ private extension HomeViewController {
     func addUserIcon() {
         navigationItem.rightBarButtonItem = userButton
     }
-    
 }
 
 // MARK: - API Call -
@@ -163,12 +155,19 @@ extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         listOfShows.count
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTableViewCell
-        cell.setUpCell(show: listOfShows[indexPath.row])
+        cell.setUpCellUI(for: listOfShows[indexPath.row])
         return cell
+    }
+}
+
+extension HomeViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let position = scrollView.contentOffset.y
+       
     }
 }

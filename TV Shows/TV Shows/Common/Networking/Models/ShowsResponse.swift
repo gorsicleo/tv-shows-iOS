@@ -9,5 +9,18 @@ import Foundation
 
 struct ShowsResponse: Decodable {
     let shows: [Show]
-    // pagination metadata (optional, only needed for extra)
+    let meta: Meta
+}
+
+// pagination metadata (optional, only needed for extra)
+
+struct Meta: Decodable {
+    let pagination: Pagination
+}
+
+struct Pagination: Decodable {
+    let count: Int
+    let page: Int
+    let items: Int
+    let pages: Int
 }
