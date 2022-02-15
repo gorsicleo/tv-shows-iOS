@@ -8,6 +8,8 @@
 import UIKit
 import Alamofire
 
+
+
 final class ShowTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var showImage: UIImageView!
@@ -25,6 +27,10 @@ final class ShowTableViewCell: UITableViewCell {
     
     func setUpTitleLabel(title: String) {
         showTitle.text = title
+    }
+    
+    override func prepareForReuse() {
+        showImage.image = nil
     }
     
 }
@@ -46,7 +52,14 @@ final class HomeViewController : UIViewController {
     
     // MARK: - Private properties -
     
+    private var networkCallInProgress = false
+    
+    private var currentPage = 1
+    private var numberOfPages = 0
+    private var numberOfShowsPerPage = 8
+    
     @IBOutlet private weak var tableView: UITableView!
+    
     lazy private var userButton: UIBarButtonItem = {
         let userButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         userButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
@@ -56,6 +69,8 @@ final class HomeViewController : UIViewController {
     var listOfShows: [Show] = [] {
         didSet {
             tableView.reloadData()
+            updateNetworkCallStatus()
+            
         }
     }
     
@@ -63,7 +78,7 @@ final class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchShowsFromAPI(router: Router.shows(items: 20, page: 1))
+        fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
         setUpUI()
         
         tableView.delegate = self
@@ -107,6 +122,14 @@ private extension HomeViewController {
     func addUserIcon() {
         navigationItem.rightBarButtonItem = userButton
     }
+    
+    func createSpinnerFooter() -> UIView {
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100))
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        return footerView
+    }
 }
 
 // MARK: - API Call -
@@ -114,6 +137,7 @@ private extension HomeViewController {
 private extension HomeViewController {
     
     func fetchShowsFromAPI(router: Router) {
+        networkCallInProgress = true
         APIManager
             .shared
             .call(
@@ -123,6 +147,7 @@ private extension HomeViewController {
                     switch response.result {
                     case .success(let payload) :
                         self.handleSuccess(shows: payload.shows)
+                        self.numberOfPages = payload.meta.pagination.pages
                         break
                     
                     case .failure(let error) :
@@ -131,16 +156,24 @@ private extension HomeViewController {
                     }
         }
     }
+    
+    func updateNetworkCallStatus() {
+        networkCallInProgress = false
+        currentPage += 1
+    }
+    
+    func canFetchMore() -> Bool {
+        !networkCallInProgress && currentPage<=numberOfPages
+    }
 }
 
 private extension HomeViewController {
     
     func handleSuccess(shows: [Show]) {
-        self.listOfShows = shows
+        self.listOfShows.append(contentsOf: shows)
     }
     
     func handleFailure(error: AFError) {
-        
     }
 }
 
@@ -168,6 +201,12 @@ extension HomeViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let position = scrollView.contentOffset.y
-       
+        let scrollViewBottom = tableView.contentSize.height-100-scrollView.frame.height
+        if position > scrollViewBottom, canFetchMore() {
+            self.tableView.tableFooterView = createSpinnerFooter()
+            fetchShowsFromAPI(router: .shows(items: numberOfShowsPerPage, page: currentPage))
+            self.tableView.tableFooterView = nil
+            print("fetching 2 items from page:" + String(currentPage) + "of: " + String(numberOfPages))
+        }
     }
 }

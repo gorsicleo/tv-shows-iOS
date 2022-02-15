@@ -52,6 +52,8 @@ enum Router {
             return UserLoginRequest(email: email, password: password).encode()
         case .register(let email, let password):
             return UserRegisterRequest(email: email, password: password).encode()
+        case .shows(let items, let page):
+            return ["page": page, "items": items]
         default:
             return [:]
         }
