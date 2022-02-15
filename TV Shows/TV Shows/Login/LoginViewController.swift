@@ -262,7 +262,7 @@ extension LoginViewController {
         switch navigationOption {
         case .home:
             let storyboard = UIStoryboard(name: "Home", bundle: .main)
-            let homeViewController = storyboard.instantiateViewController(withIdentifier: "Home")
+            let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
             navigationController?.pushViewController(homeViewController, animated: true)
         }
     }

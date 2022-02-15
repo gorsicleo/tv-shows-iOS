@@ -13,6 +13,7 @@ enum Router {
     case login(email: String, password: String)
     case register(email: String, password: String)
     case shows(items: Int, page: Int)
+    case topRated
     case reviews(showId: String)
     case createReview(showId: Int, comment: String, rating: Int)
     case userInfo
@@ -32,6 +33,8 @@ enum Router {
             return "/reviews"
         case .userInfo:
             return "/users/me"
+        case .topRated:
+            return "/shows/top_rated"
         }
     }
 
@@ -39,7 +42,7 @@ enum Router {
         switch self {
         case .login, .register, .createReview:
             return .post
-        case .shows, .reviews, .userInfo:
+        case .shows, .reviews, .userInfo, .topRated:
             return .get
         default:
             return .put

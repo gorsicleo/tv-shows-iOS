@@ -1,8 +1,8 @@
 //
-//  HomeViewController.swift
+//  TopRatedViewController.swift
 //  TV Shows
 //
-//  Created by Leo Goršić on 07.02.2022..
+//  Created by Leo Goršić on 15.02.2022..
 //
 
 import UIKit
@@ -10,74 +10,10 @@ import Alamofire
 
 
 
-final class ShowTableViewCell: UITableViewCell {
-    
-    @IBOutlet private weak var showImageContainer: UIView!
-    @IBOutlet private weak var showImage: UIImageView!
-    @IBOutlet private weak var showTitle: UILabel!
-    
-    func setUpCellUI(for show: Show) {
-        setUpImageView(url: show.imageURL ?? "")
-        setUpTitleLabel(title: show.title)
-    }
-    
-//    func removeSpinner() {
-//        if let spinner = showImageContainer?.viewWithTag(1) {
-//            spinner.removeFromSuperview()
-//            print("Removed")
-//        } else {print("Not removed")}
-//    }
-    
-    func setUpImageView(url: String) {
-        guard let showImageURL = URL(string: url) else { return }
-//        let spinner = UIActivityIndicatorView()
-//        spinner.center = showImageContainer.center
-//        spinner.tag = 1
-//        spinner.startAnimating()
-//        showImageContainer.addSubview(spinner)
-        showImage.loadImageFromNetwork(url: showImageURL)
-//        removeSpinner()
-    }
-    
-    func setUpTitleLabel(title: String) {
-        showTitle.text = title
-    }
-    
-    override func prepareForReuse() {
-        showImage.image = nil
-    }
-    
-}
 
-extension UIImageView {
-    func showSpinner() {
-        let spinner = UIActivityIndicatorView()
-        spinner.tag = 1
-        spinner.center = self.center
-        spinner.startAnimating()
-        self.addSubview(spinner)
-    }
+final class TopRatedViewController : UIViewController {
     
-    func dismissSpinner() {
-        if let spinnerView = self.viewWithTag(1) {
-                spinnerView.removeFromSuperview()
-        }
-    }
-    func loadImageFromNetwork(url: URL) {
-        showSpinner()
-        DispatchQueue
-            .global()
-            .async { [weak self] in
-                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async { self?.image = image
-                        self?.dismissSpinner() }
-                }
-            }
-    }
-}
-
-final class HomeViewController : UIViewController {
-    
+    @IBOutlet private weak var tableView: UITableView!
     
     // MARK: - Private properties -
     
@@ -87,7 +23,7 @@ final class HomeViewController : UIViewController {
     private var numberOfPages = 0
     private var numberOfShowsPerPage = 8
     
-    @IBOutlet private weak var tableView: UITableView!
+    
     
     lazy private var userButton: UIBarButtonItem = {
         let userButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
@@ -107,7 +43,7 @@ final class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
+        fetchShowsFromAPI(router: Router.topRated)
         setUpUI()
         
         tableView.delegate = self
@@ -134,7 +70,7 @@ final class HomeViewController : UIViewController {
 
 // MARK: - Extensions -
 
-private extension HomeViewController {
+private extension TopRatedViewController {
     
     // MARK: - Setup UI -
     
@@ -163,7 +99,7 @@ private extension HomeViewController {
 
 // MARK: - API Call -
 
-private extension HomeViewController {
+private extension TopRatedViewController {
     
     func fetchShowsFromAPI(router: Router) {
         networkCallInProgress = true
@@ -171,12 +107,11 @@ private extension HomeViewController {
             .shared
             .call(
                 router: router,
-                responseType: ShowsResponse.self) { [weak self] response in
+                responseType: TopRatedResponse.self) { [weak self] response in
                     guard let self = self else { return }
                     switch response.result {
                     case .success(let payload) :
                         self.handleSuccess(shows: payload.shows)
-                        self.numberOfPages = payload.meta.pagination.pages
                         break
                     
                     case .failure(let error) :
@@ -196,7 +131,7 @@ private extension HomeViewController {
     }
 }
 
-private extension HomeViewController {
+private extension TopRatedViewController {
     
     func handleSuccess(shows: [Show]) {
         self.listOfShows.append(contentsOf: shows)
@@ -206,14 +141,14 @@ private extension HomeViewController {
     }
 }
 
-extension HomeViewController: UITableViewDelegate {
+extension TopRatedViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Yout tapped me!")
     }
 }
 
-extension HomeViewController: UITableViewDataSource {
+extension TopRatedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         listOfShows.count
@@ -226,14 +161,14 @@ extension HomeViewController: UITableViewDataSource {
     }
 }
 
-extension HomeViewController: UIScrollViewDelegate {
+extension TopRatedViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let position = scrollView.contentOffset.y
         let scrollViewBottom = tableView.contentSize.height-100-scrollView.frame.height
         if position > scrollViewBottom, canFetchMore() {
             self.tableView.tableFooterView = createSpinnerFooter()
-            fetchShowsFromAPI(router: .shows(items: numberOfShowsPerPage, page: currentPage))
+            fetchShowsFromAPI(router: .topRated)
             self.tableView.tableFooterView = nil
             print("fetching 2 items from page:" + String(currentPage) + "of: " + String(numberOfPages))
         }

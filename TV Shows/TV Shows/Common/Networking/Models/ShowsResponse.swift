@@ -12,6 +12,10 @@ struct ShowsResponse: Decodable {
     let meta: Meta
 }
 
+struct TopRatedResponse: Decodable {
+    let shows: [Show]
+}
+
 // pagination metadata (optional, only needed for extra)
 
 struct Meta: Decodable {
