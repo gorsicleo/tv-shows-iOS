@@ -8,32 +8,6 @@
 import UIKit
 import Alamofire
 
-// MARK: - Table View cell -
-
-final class ShowTableViewCell: UITableViewCell {
-    
-    @IBOutlet private weak var showImage: UIImageView!
-    @IBOutlet private weak var showTitle: UILabel!
-    
-    func setUpCellUI(for show: Show) {
-        setUpImageView(url: show.imageURL ?? "")
-        setUpTitleLabel(title: show.title)
-    }
-    
-    func setUpImageView(url: String) {
-        guard let showImageURL = URL(string: url) else { return }
-        showImage.loadImageFromNetwork(url: showImageURL)
-    }
-    
-    func setUpTitleLabel(title: String) {
-        showTitle.text = title
-    }
-    
-    override func prepareForReuse() {
-        showImage.image = nil
-    }
-}
-
 extension UIImageView {
     
     func showSpinner() {
@@ -71,12 +45,6 @@ final class HomeViewController : UIViewController {
     
     // MARK: - Private properties -
     
-    private var networkCallInProgress = false
-    
-    private var currentPage = 1
-    private var numberOfPages = 0
-    private var numberOfShowsPerPage = 8
-    
     @IBOutlet private weak var tableView: UITableView!
     
     lazy private var userButton: UIBarButtonItem = {
@@ -85,7 +53,11 @@ final class HomeViewController : UIViewController {
         return userButton
     }()
     
-    var listOfShows: [Show] = [] {
+    private var networkCallInProgress = false
+    private var currentPage = 1
+    private var numberOfPages = 0
+    private var numberOfShowsPerPage = 8
+    private var listOfShows: [Show] = [] {
         didSet {
             tableView.reloadData()
             updateNetworkCallStatus()
@@ -96,26 +68,42 @@ final class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
+        setUpTableView()
         setUpUI()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+        fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        setUpNavigationBar()
     }
 }
 
 // MARK: - Extensions -
+
+private extension HomeViewController {
+    
+    func setUpNavigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+}
+
+private extension HomeViewController {
+    
+    // MARK: - Setup Table View -
+    
+    func setUpTableView() {
+        registerCells()
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func registerCells() {
+        let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "ShowCell")
+    }
+}
 
 private extension HomeViewController {
     
@@ -195,7 +183,8 @@ private extension HomeViewController {
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Yout tapped me!")
+        let show = listOfShows[indexPath.row]
+        print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
     }
 }
 
@@ -206,7 +195,7 @@ extension HomeViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTitleTableViewCell
         cell.setUpCellUI(for: listOfShows[indexPath.row])
         return cell
     }
@@ -215,12 +204,12 @@ extension HomeViewController: UITableViewDataSource {
 extension HomeViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let position = scrollView.contentOffset.y
-        let scrollViewBottom = tableView.contentSize.height-100-scrollView.frame.height
-        if position > scrollViewBottom, canFetchMore() {
+        
+        if let visiblePaths = tableView.indexPathsForVisibleRows,
+            visiblePaths.contains([0, listOfShows.count - 1]), canFetchMore() {
+            
             self.tableView.tableFooterView = createSpinnerFooter()
             fetchShowsFromAPI(router: .shows(items: numberOfShowsPerPage, page: currentPage))
-            print("fetching 2 items from page:" + String(currentPage) + "of: " + String(numberOfPages))
         }
     }
 }

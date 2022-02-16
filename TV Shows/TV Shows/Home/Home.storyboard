@@ -20,51 +20,6 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="113" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="79b-84-mcZ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ShowCell" id="fhl-EA-Sdf" customClass="ShowTableViewCell" customModule="TV_Shows" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="414" height="113"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fhl-EA-Sdf" id="K3a-Lp-LB6">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="113"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yVU-ay-Gg2">
-                                                    <rect key="frame" x="20" y="11.5" width="64" height="90"/>
-                                                    <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="drK-hu-KWE">
-                                                            <rect key="frame" x="0.0" y="0.0" width="64" height="90"/>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                    <constraints>
-                                                        <constraint firstItem="drK-hu-KWE" firstAttribute="top" secondItem="yVU-ay-Gg2" secondAttribute="top" id="0QQ-VG-Hnm"/>
-                                                        <constraint firstItem="drK-hu-KWE" firstAttribute="leading" secondItem="yVU-ay-Gg2" secondAttribute="leading" id="2di-Fd-haw"/>
-                                                        <constraint firstAttribute="trailing" secondItem="drK-hu-KWE" secondAttribute="trailing" id="CpS-5H-LqY"/>
-                                                        <constraint firstAttribute="height" constant="90" id="k5F-pk-2x9"/>
-                                                        <constraint firstAttribute="width" constant="64" id="vB3-LD-4xB"/>
-                                                        <constraint firstAttribute="bottom" secondItem="drK-hu-KWE" secondAttribute="bottom" id="zTe-vf-Ymc"/>
-                                                    </constraints>
-                                                </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="peG-0g-xDM">
-                                                    <rect key="frame" x="104" y="46" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="yVU-ay-Gg2" firstAttribute="centerY" secondItem="K3a-Lp-LB6" secondAttribute="centerY" id="4VE-Si-ry7"/>
-                                                <constraint firstItem="peG-0g-xDM" firstAttribute="leading" secondItem="yVU-ay-Gg2" secondAttribute="trailing" constant="20" id="ieQ-wJ-18y"/>
-                                                <constraint firstItem="yVU-ay-Gg2" firstAttribute="leading" secondItem="K3a-Lp-LB6" secondAttribute="leading" constant="20" id="ivq-az-0k5"/>
-                                                <constraint firstItem="peG-0g-xDM" firstAttribute="centerY" secondItem="K3a-Lp-LB6" secondAttribute="centerY" id="oZM-y9-mEv"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="showImage" destination="drK-hu-KWE" id="nJf-z7-lAb"/>
-                                            <outlet property="showTitle" destination="peG-0g-xDM" id="JmI-mb-BD3"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
                                 <sections/>
                             </tableView>
                         </subviews>
@@ -115,51 +70,6 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="113" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="4Bp-F0-w7j">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ShowCell" id="qm8-Go-YCM" customClass="ShowTableViewCell" customModule="TV_Shows" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="414" height="113"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qm8-Go-YCM" id="aw6-Gy-zFe">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="113"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IaL-6y-05K">
-                                                    <rect key="frame" x="20" y="11.5" width="64" height="90"/>
-                                                    <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MbD-Hu-5wm">
-                                                            <rect key="frame" x="0.0" y="0.0" width="64" height="90"/>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="MbD-Hu-5wm" secondAttribute="bottom" id="6vu-34-c28"/>
-                                                        <constraint firstItem="MbD-Hu-5wm" firstAttribute="top" secondItem="IaL-6y-05K" secondAttribute="top" id="L5C-M2-xBq"/>
-                                                        <constraint firstAttribute="trailing" secondItem="MbD-Hu-5wm" secondAttribute="trailing" id="UOV-MK-7fE"/>
-                                                        <constraint firstAttribute="height" constant="90" id="jaG-tO-eq6"/>
-                                                        <constraint firstAttribute="width" constant="64" id="pzd-yI-XfS"/>
-                                                        <constraint firstItem="MbD-Hu-5wm" firstAttribute="leading" secondItem="IaL-6y-05K" secondAttribute="leading" id="rpF-aR-ibW"/>
-                                                    </constraints>
-                                                </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NPP-ig-FBE">
-                                                    <rect key="frame" x="104" y="46" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="IaL-6y-05K" firstAttribute="leading" secondItem="aw6-Gy-zFe" secondAttribute="leading" constant="20" id="0HB-5X-HXk"/>
-                                                <constraint firstItem="NPP-ig-FBE" firstAttribute="leading" secondItem="IaL-6y-05K" secondAttribute="trailing" constant="20" id="WDU-zj-aSm"/>
-                                                <constraint firstItem="IaL-6y-05K" firstAttribute="centerY" secondItem="aw6-Gy-zFe" secondAttribute="centerY" id="Yhm-hA-tXl"/>
-                                                <constraint firstItem="NPP-ig-FBE" firstAttribute="centerY" secondItem="aw6-Gy-zFe" secondAttribute="centerY" id="o7j-sr-ySX"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="showImage" destination="MbD-Hu-5wm" id="HUd-Vv-gCR"/>
-                                            <outlet property="showTitle" destination="NPP-ig-FBE" id="I8H-L5-5PO"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
                                 <sections/>
                             </tableView>
                         </subviews>

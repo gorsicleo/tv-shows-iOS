@@ -10,10 +10,9 @@ import Alamofire
 
 final class TopRatedViewController : UIViewController {
     
-    @IBOutlet private weak var tableView: UITableView!
-    
     // MARK: - Private properties -
-
+    
+    @IBOutlet private weak var tableView: UITableView!
     lazy private var userButton: UIBarButtonItem = {
         let userButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         userButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
@@ -30,6 +29,8 @@ final class TopRatedViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "ShowCell")
         fetchShowsFromAPI(router: Router.topRated)
         setUpUI()
         
@@ -117,7 +118,8 @@ private extension TopRatedViewController {
 extension TopRatedViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("You tapped me!")
+        let show = listOfShows[indexPath.row]
+        print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
     }
 }
 
@@ -128,7 +130,7 @@ extension TopRatedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTitleTableViewCell
         cell.setUpCellUI(for: listOfShows[indexPath.row])
         return cell
     }

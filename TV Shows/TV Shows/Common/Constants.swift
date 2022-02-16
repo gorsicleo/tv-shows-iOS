@@ -35,4 +35,10 @@ enum Constants {
         static let registerFailed = "Registration failed. Please use different email."
         static let missingHeaders = "Missing headers"
     }
+    
+    // MARK: - URL-s -
+    
+    enum CommonURL {
+        static let errorImageURL = "https://www.iconpacks.net/icons/1/free-error-icon-905-thumb.png"
+    }
 }
