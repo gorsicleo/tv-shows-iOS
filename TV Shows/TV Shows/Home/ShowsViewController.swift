@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-
+// MARK: - Table View cell -
 
 final class ShowTableViewCell: UITableViewCell {
     
@@ -35,6 +35,7 @@ final class ShowTableViewCell: UITableViewCell {
 }
 
 extension UIImageView {
+    
     func showSpinner() {
         let spinner = UIActivityIndicatorView()
         spinner.tag = 1
@@ -45,24 +46,28 @@ extension UIImageView {
     
     func dismissSpinner() {
         if let spinnerView = self.viewWithTag(1) {
-                spinnerView.removeFromSuperview()
+            spinnerView.removeFromSuperview()
         }
     }
+    
     func loadImageFromNetwork(url: URL) {
         showSpinner()
         DispatchQueue
             .global()
             .async { [weak self] in
                 if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async { self?.image = image
-                        self?.dismissSpinner() }
+                    DispatchQueue.main.async {
+                        self?.image = image
+                        self?.dismissSpinner()
+                    }
                 }
             }
     }
 }
 
+// MARK: - Home View Controller -
+
 final class HomeViewController : UIViewController {
-    
     
     // MARK: - Private properties -
     
@@ -84,7 +89,6 @@ final class HomeViewController : UIViewController {
         didSet {
             tableView.reloadData()
             updateNetworkCallStatus()
-            
         }
     }
     
@@ -97,13 +101,7 @@ final class HomeViewController : UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        //        setUpCornerRadius()
-//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -163,12 +161,12 @@ private extension HomeViewController {
                         self.handleSuccess(shows: payload.shows)
                         self.numberOfPages = payload.meta.pagination.pages
                         break
-                    
+                        
                     case .failure(let error) :
                         self.handleFailure(error: error)
                         break
                     }
-        }
+                }
     }
     
     func updateNetworkCallStatus() {
@@ -177,7 +175,7 @@ private extension HomeViewController {
     }
     
     func canFetchMore() -> Bool {
-        !networkCallInProgress && currentPage<=numberOfPages
+        return !networkCallInProgress && currentPage<=numberOfPages
     }
 }
 
@@ -185,11 +183,14 @@ private extension HomeViewController {
     
     func handleSuccess(shows: [Show]) {
         self.listOfShows.append(contentsOf: shows)
+        self.tableView.tableFooterView = nil
     }
     
     func handleFailure(error: AFError) {
     }
 }
+
+// MARK: - Table View delegates -
 
 extension HomeViewController: UITableViewDelegate {
     
@@ -201,7 +202,7 @@ extension HomeViewController: UITableViewDelegate {
 extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        listOfShows.count
+        return listOfShows.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -219,7 +220,6 @@ extension HomeViewController: UIScrollViewDelegate {
         if position > scrollViewBottom, canFetchMore() {
             self.tableView.tableFooterView = createSpinnerFooter()
             fetchShowsFromAPI(router: .shows(items: numberOfShowsPerPage, page: currentPage))
-            self.tableView.tableFooterView = nil
             print("fetching 2 items from page:" + String(currentPage) + "of: " + String(numberOfPages))
         }
     }

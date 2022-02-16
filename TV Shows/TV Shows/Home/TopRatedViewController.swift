@@ -8,23 +8,12 @@
 import UIKit
 import Alamofire
 
-
-
-
 final class TopRatedViewController : UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     
     // MARK: - Private properties -
-    
-    private var networkCallInProgress = false
-    
-    private var currentPage = 1
-    private var numberOfPages = 0
-    private var numberOfShowsPerPage = 8
-    
-    
-    
+
     lazy private var userButton: UIBarButtonItem = {
         let userButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         userButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
@@ -34,8 +23,6 @@ final class TopRatedViewController : UIViewController {
     var listOfShows: [Show] = [] {
         didSet {
             tableView.reloadData()
-            updateNetworkCallStatus()
-            
         }
     }
     
@@ -48,13 +35,7 @@ final class TopRatedViewController : UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        //        setUpCornerRadius()
-//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -102,7 +83,6 @@ private extension TopRatedViewController {
 private extension TopRatedViewController {
     
     func fetchShowsFromAPI(router: Router) {
-        networkCallInProgress = true
         APIManager
             .shared
             .call(
@@ -120,15 +100,6 @@ private extension TopRatedViewController {
                     }
         }
     }
-    
-    func updateNetworkCallStatus() {
-        networkCallInProgress = false
-        currentPage += 1
-    }
-    
-    func canFetchMore() -> Bool {
-        !networkCallInProgress && currentPage<=numberOfPages
-    }
 }
 
 private extension TopRatedViewController {
@@ -141,10 +112,12 @@ private extension TopRatedViewController {
     }
 }
 
+// MARK: - Table View delegates -
+
 extension TopRatedViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Yout tapped me!")
+        print("You tapped me!")
     }
 }
 
@@ -158,19 +131,5 @@ extension TopRatedViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTableViewCell
         cell.setUpCellUI(for: listOfShows[indexPath.row])
         return cell
-    }
-}
-
-extension TopRatedViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let position = scrollView.contentOffset.y
-        let scrollViewBottom = tableView.contentSize.height-100-scrollView.frame.height
-        if position > scrollViewBottom, canFetchMore() {
-            self.tableView.tableFooterView = createSpinnerFooter()
-            fetchShowsFromAPI(router: .topRated)
-            self.tableView.tableFooterView = nil
-            print("fetching 2 items from page:" + String(currentPage) + "of: " + String(numberOfPages))
-        }
     }
 }
