@@ -7,41 +7,9 @@
 
 import UIKit
 import Alamofire
+import Kingfisher
 
-extension UIImageView {
-    
-    func showSpinner() {
-        let spinner = UIActivityIndicatorView()
-        spinner.tag = 1
-        spinner.center = self.center
-        spinner.startAnimating()
-        self.addSubview(spinner)
-    }
-    
-    func dismissSpinner() {
-        if let spinnerView = self.viewWithTag(1) {
-            spinnerView.removeFromSuperview()
-        }
-    }
-    
-    func loadImageFromNetwork(url: URL) {
-        showSpinner()
-        DispatchQueue
-            .global()
-            .async { [weak self] in
-                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                        self?.dismissSpinner()
-                    }
-                }
-            }
-    }
-}
-
-// MARK: - Home View Controller -
-
-final class HomeViewController : UIViewController {
+final class ShowsViewController : UIViewController {
     
     // MARK: - Private properties -
     
@@ -81,7 +49,7 @@ final class HomeViewController : UIViewController {
 
 // MARK: - Extensions -
 
-private extension HomeViewController {
+private extension ShowsViewController {
     
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
@@ -89,7 +57,7 @@ private extension HomeViewController {
     }
 }
 
-private extension HomeViewController {
+private extension ShowsViewController {
     
     // MARK: - Setup Table View -
     
@@ -105,11 +73,12 @@ private extension HomeViewController {
     }
 }
 
-private extension HomeViewController {
+private extension ShowsViewController {
     
     // MARK: - Setup UI -
     
     func setUpUI() {
+        colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
         hidebackButton()
         addUserIcon()
     }
@@ -117,6 +86,7 @@ private extension HomeViewController {
     func hidebackButton() {
         self.navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.setViewControllers([self], animated: true)
+        self.navigationController?.navigationBar.barTintColor = .red
     }
     
     func addUserIcon() {
@@ -134,7 +104,7 @@ private extension HomeViewController {
 
 // MARK: - API Call -
 
-private extension HomeViewController {
+private extension ShowsViewController {
     
     func fetchShowsFromAPI(router: Router) {
         networkCallInProgress = true
@@ -167,7 +137,7 @@ private extension HomeViewController {
     }
 }
 
-private extension HomeViewController {
+private extension ShowsViewController {
     
     func handleSuccess(shows: [Show]) {
         self.listOfShows.append(contentsOf: shows)
@@ -180,7 +150,7 @@ private extension HomeViewController {
 
 // MARK: - Table View delegates -
 
-extension HomeViewController: UITableViewDelegate {
+extension ShowsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let show = listOfShows[indexPath.row]
@@ -188,7 +158,7 @@ extension HomeViewController: UITableViewDelegate {
     }
 }
 
-extension HomeViewController: UITableViewDataSource {
+extension ShowsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listOfShows.count
@@ -201,7 +171,7 @@ extension HomeViewController: UITableViewDataSource {
     }
 }
 
-extension HomeViewController: UIScrollViewDelegate {
+extension ShowsViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         

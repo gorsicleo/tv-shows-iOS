@@ -57,6 +57,7 @@ private extension TopRatedViewController {
     // MARK: - Setup UI -
     
     func setUpUI() {
+        colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
         hidebackButton()
         addUserIcon()
     }
