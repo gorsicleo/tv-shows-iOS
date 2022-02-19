@@ -27,4 +27,12 @@ extension UIViewController {
         
         return navBarApperance
     }
+
+    static func createSpinnerFooter(frame: CGRect) -> UIView {
+        let footerView = UIView(frame: frame)
+        let spinner = UIActivityIndicatorView()
+        spinner.center = footerView.center
+        footerView.addSubview(spinner)
+        return footerView
+    }
 }

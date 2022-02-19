@@ -35,6 +35,7 @@ enum Constants {
         static let resgisterSuccesful = "Register success. Log in to continue."
         static let registerFailed = "Registration failed. Please use different email."
         static let missingHeaders = "Missing headers"
+        static let networkError = "Can't connect to the server. Please check your connection"
     }
     
     // MARK: - URL-s -

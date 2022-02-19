@@ -24,8 +24,8 @@
                             <constraint firstAttribute="width" constant="64" id="vCI-Bi-gXa"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMZ-kf-QWM">
-                        <rect key="frame" x="104" y="56" width="42" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMZ-kf-QWM">
+                        <rect key="frame" x="104" y="56.5" width="180" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -33,6 +33,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="h18-aD-NIU" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="5Hq-QC-d4H"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="GMZ-kf-QWM" secondAttribute="trailing" constant="20" id="CN9-pO-0Fx"/>
                     <constraint firstItem="GMZ-kf-QWM" firstAttribute="leading" secondItem="h18-aD-NIU" secondAttribute="trailing" constant="20" id="SEN-Ml-ADB"/>
                     <constraint firstItem="h18-aD-NIU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="aAZ-ks-ECS"/>
                     <constraint firstItem="GMZ-kf-QWM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="n5N-Zc-sZC"/>

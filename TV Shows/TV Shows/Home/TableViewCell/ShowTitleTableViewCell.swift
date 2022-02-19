@@ -8,6 +8,10 @@
 import UIKit
 
 final class ShowTitleTableViewCell: UITableViewCell {
+    
+    required init?(coder aDecoder: NSCoder) {
+           super.init(coder: aDecoder)
+       }
 
     // MARK: - IBOutlets -
     
@@ -24,23 +28,25 @@ final class ShowTitleTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    // MARK: - Setup UI -
-    
+    override func prepareForReuse() {
+        showImage.image = nil
+    }
+}
+
+// MARK: - Setup UI -
+
+extension ShowTitleTableViewCell {
     func setUpCellUI(for show: Show) {
         setUpImageView(url: show.imageURL ?? Constants.CommonURL.errorImageURL)
         setUpTitleLabel(title: show.title)
     }
-    
-    func setUpImageView(url: String) {
+
+    private func setUpImageView(url: String) {
         guard let showImageURL = URL(string: url) else { return }
         showImage.loadImageFromNetwork(url: showImageURL)
     }
-    
-    func setUpTitleLabel(title: String) {
+
+    private func setUpTitleLabel(title: String) {
         showTitle.text = title
-    }
-    
-    override func prepareForReuse() {
-        showImage.image = nil
     }
 }

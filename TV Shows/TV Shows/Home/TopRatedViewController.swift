@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import SVProgressHUD
 
 final class TopRatedViewController : UIViewController {
     
@@ -14,8 +15,17 @@ final class TopRatedViewController : UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     lazy private var userButton: UIBarButtonItem = {
-        let userButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        userButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
+        let userButton = UIBarButtonItem(
+            title: "",
+            style: .plain,
+            target: self,
+            action: nil
+        )
+        userButton.setBackgroundImage(
+            UIImage(named: "userIcon"),
+            for: .normal,
+            barMetrics: .default
+        )
         return userButton
     }()
     
@@ -30,7 +40,7 @@ final class TopRatedViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
-        tableView.register(cellNib, forCellReuseIdentifier: "ShowCell")
+        tableView.register(cellNib, forCellReuseIdentifier: "ShowTitleTableViewCell")
         fetchShowsFromAPI(router: Router.topRated)
         setUpUI()
         
@@ -70,14 +80,6 @@ private extension TopRatedViewController {
     func addUserIcon() {
         navigationItem.rightBarButtonItem = userButton
     }
-    
-    func createSpinnerFooter() -> UIView {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100))
-        let spinner = UIActivityIndicatorView()
-        spinner.center = footerView.center
-        footerView.addSubview(spinner)
-        return footerView
-    }
 }
 
 // MARK: - API Call -
@@ -107,10 +109,11 @@ private extension TopRatedViewController {
 private extension TopRatedViewController {
     
     func handleSuccess(shows: [Show]) {
-        self.listOfShows.append(contentsOf: shows)
+        listOfShows.append(contentsOf: shows)
     }
     
     func handleFailure(error: AFError) {
+        SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
 
@@ -131,7 +134,7 @@ extension TopRatedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTitleTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowTitleTableViewCell", for: indexPath) as! ShowTitleTableViewCell
         cell.setUpCellUI(for: listOfShows[indexPath.row])
         return cell
     }

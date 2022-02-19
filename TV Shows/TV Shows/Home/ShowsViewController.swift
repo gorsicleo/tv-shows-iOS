@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import Kingfisher
+import SVProgressHUD
 
 final class ShowsViewController : UIViewController {
     
@@ -69,7 +70,7 @@ private extension ShowsViewController {
     
     func registerCells() {
         let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
-        tableView.register(cellNib, forCellReuseIdentifier: "ShowCell")
+        tableView.register(cellNib, forCellReuseIdentifier: "ShowTitleTableViewCell")
     }
 }
 
@@ -80,26 +81,20 @@ private extension ShowsViewController {
     func setUpUI() {
         colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
         hidebackButton()
-        addUserIcon()
+        addRightNavigationButton()
     }
     
     func hidebackButton() {
-        self.navigationItem.setHidesBackButton(true, animated: true)
+        navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.setViewControllers([self], animated: true)
-        self.navigationController?.navigationBar.barTintColor = .red
+        navigationController?.navigationBar.barTintColor = .red
     }
     
-    func addUserIcon() {
+    func addRightNavigationButton() {
         navigationItem.rightBarButtonItem = userButton
     }
     
-    func createSpinnerFooter() -> UIView {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100))
-        let spinner = UIActivityIndicatorView()
-        spinner.center = footerView.center
-        footerView.addSubview(spinner)
-        return footerView
-    }
+    
 }
 
 // MARK: - API Call -
@@ -140,11 +135,12 @@ private extension ShowsViewController {
 private extension ShowsViewController {
     
     func handleSuccess(shows: [Show]) {
-        self.listOfShows.append(contentsOf: shows)
-        self.tableView.tableFooterView = nil
+        listOfShows.append(contentsOf: shows)
+        tableView.tableFooterView = nil
     }
     
     func handleFailure(error: AFError) {
+        SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
 
@@ -165,20 +161,19 @@ extension ShowsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowCell", for: indexPath) as! ShowTitleTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowTitleTableViewCell", for: indexPath) as! ShowTitleTableViewCell
         cell.setUpCellUI(for: listOfShows[indexPath.row])
         return cell
     }
 }
 
 extension ShowsViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if let visiblePaths = tableView.indexPathsForVisibleRows,
-            visiblePaths.contains([0, listOfShows.count - 1]), canFetchMore() {
-            
-            self.tableView.tableFooterView = createSpinnerFooter()
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row > listOfShows.count - 2, canFetchMore() {
+            tableView.tableFooterView = ShowsViewController.createSpinnerFooter(
+                frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100)
+            )
             fetchShowsFromAPI(router: .shows(items: numberOfShowsPerPage, page: currentPage))
         }
     }
