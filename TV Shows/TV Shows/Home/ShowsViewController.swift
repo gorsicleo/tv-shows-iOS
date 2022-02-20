@@ -10,6 +10,10 @@ import Alamofire
 import Kingfisher
 import SVProgressHUD
 
+enum HomeNavigationOption {
+    case showDetails
+}
+
 final class ShowsViewController : UIViewController {
     
     // MARK: - Private properties -

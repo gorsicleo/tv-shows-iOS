@@ -124,6 +124,7 @@ extension TopRatedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let show = listOfShows[indexPath.row]
         print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
+        navigate(to: .showDetails, with: show)
     }
 }
 
@@ -139,3 +140,24 @@ extension TopRatedViewController: UITableViewDataSource {
         return cell
     }
 }
+
+// MARK: - Navigation -
+
+extension TopRatedViewController {
+
+    func navigate(to navigationOption: HomeNavigationOption, with show: Show) {
+        switch navigationOption {
+        case .showDetails:
+            let storyboard = UIStoryboard(name: "ShowDetails", bundle: .main)
+            let ShowDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
+            ShowDetailsViewController.closure = { [weak self] showId in
+                ShowDetailsViewController.showId = showId
+
+            }
+            ShowDetailsViewController.closure?(show.id)
+            navigationController?.pushViewController(ShowDetailsViewController, animated: true)
+
+        }
+    }
+}
+
