@@ -7,13 +7,23 @@
 
 import Foundation
 import UIKit
+import Alamofire
+import SVProgressHUD
 
 final class ShowDetailsViewController: UIViewController {
 
-    var closure: ((_ text:String?) -> ())?
-    var showId: String? {
+    @IBOutlet weak var showImage: UIImageView!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var showDescription: UITextView!
+    var closure: ((_ text:Show?) -> ())?
+    var reviews: [Review] = [] {
         didSet {
-            fetchShowFromAPI(router: <#T##Router#>)
+
+        }
+    }
+    var show: Show? {
+        didSet {
+
         }
     }
 
@@ -22,6 +32,12 @@ final class ShowDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let cellNib = UINib(nibName: "ShowDetailsTableViewFirstCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "ShowDetailsTableViewFirstCell")
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 720
+        tableView.delegate = self
+        tableView.dataSource = self
         
 
     }
@@ -39,6 +55,33 @@ private extension ShowDetailsViewController {
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.prefersLargeTitles = true
+    }
+}
+
+extension ShowDetailsViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+}
+
+extension ShowDetailsViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        reviews.count
+        1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowDetailsTableViewFirstCell", for: indexPath) as! ShowDetailsTableViewFirstCell
+        print("Pred ulazom sam")
+        if let show = show {
+            print("Usao sam")
+            cell.setUpCellUI(for: show)
+        }
+        print("Izvan ifa")
+
+        return cell
     }
 }
 
@@ -63,23 +106,33 @@ private extension ShowDetailsViewController {
 
 private extension ShowDetailsViewController {
 
-    func fetchShowFromAPI(router: Router) {
+    func fetchShowsFromAPI(router: Router) {
         APIManager
             .shared
             .call(
                 router: router,
-                responseType: TopRatedResponse.self) { [weak self] response in
+                responseType: ReviewsResponse.self) { [weak self] response in
                     guard let self = self else { return }
                     switch response.result {
                     case .success(let payload) :
-//                        self.handleSuccess(shows: payload.shows)
+                        self.handleSuccess(reviews: payload.reviews)
                         break
 
                     case .failure(let error) :
-//                        self.handleFailure(error: error)
+                        self.handleFailure(error: error)
                         break
                     }
-                }
+        }
     }
 }
 
+private extension ShowDetailsViewController {
+
+    func handleSuccess(reviews: [Review]) {
+        self.reviews = reviews
+    }
+
+    func handleFailure(error: AFError) {
+        SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
+    }
+}

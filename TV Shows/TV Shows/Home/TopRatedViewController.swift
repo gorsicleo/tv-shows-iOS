@@ -150,11 +150,10 @@ extension TopRatedViewController {
         case .showDetails:
             let storyboard = UIStoryboard(name: "ShowDetails", bundle: .main)
             let ShowDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
-            ShowDetailsViewController.closure = { [weak self] showId in
-                ShowDetailsViewController.showId = showId
-
+            ShowDetailsViewController.closure = { show in
+                ShowDetailsViewController.show = show
             }
-            ShowDetailsViewController.closure?(show.id)
+            ShowDetailsViewController.closure?(show)
             navigationController?.pushViewController(ShowDetailsViewController, animated: true)
 
         }

@@ -18,6 +18,7 @@ enum Router {
     case createReview(showId: Int, comment: String, rating: Int)
     case userInfo
     case updateProfile(data: MultipartFormData)
+    case displayShow(showId: String)
 
     var path: String {
         switch self {
@@ -35,6 +36,8 @@ enum Router {
             return "/users/me"
         case .topRated:
             return "/shows/top_rated"
+        case .displayShow(showId: let showId):
+            return "/shows/\(showId)"
         }
     }
 
@@ -42,7 +45,7 @@ enum Router {
         switch self {
         case .login, .register, .createReview:
             return .post
-        case .shows, .reviews, .userInfo, .topRated:
+        case .shows, .reviews, .userInfo, .topRated, .displayShow:
             return .get
         default:
             return .put

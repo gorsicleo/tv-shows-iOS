@@ -31,10 +31,13 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="cma-yE-BM1" secondAttribute="trailing" id="nfE-aV-8yE"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="cma-yE-BM1" id="LcY-od-YVV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="112" y="63"/>
+            <point key="canvasLocation" x="111.59420289855073" y="62.946428571428569"/>
         </scene>
     </scenes>
     <resources>
