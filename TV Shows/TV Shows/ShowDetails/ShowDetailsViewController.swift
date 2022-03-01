@@ -15,30 +15,26 @@ final class ShowDetailsViewController: UIViewController {
     @IBOutlet weak var showImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var showDescription: UITextView!
-    var closure: ((_ text:Show?) -> ())?
+    @IBOutlet weak var addReviewButton: CustomButton!
     var reviews: [Review] = [] {
         didSet {
 
         }
     }
-    var show: Show? {
-        didSet {
-
-        }
-    }
+    var show: Show?
 
 
     // MARK: - ViewController Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let cellNib = UINib(nibName: "ShowDetailsTableViewFirstCell", bundle: nil)
-        tableView.register(cellNib, forCellReuseIdentifier: "ShowDetailsTableViewFirstCell")
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 720
         tableView.delegate = self
         tableView.dataSource = self
-        
+        setUpTableView()
+        setUpReviewButton()
+        if let showId = show?.id {
+            fetchShowsFromAPI(router: .reviews(showId: showId))
+        }
 
     }
 
@@ -55,6 +51,12 @@ private extension ShowDetailsViewController {
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.prefersLargeTitles = true
+        title = show?.title
+    }
+
+    func setUpReviewButton() {
+        addReviewButton.setBackgroundColor(Constants.Colors.mainRedColor, for: .normal)
+        addReviewButton.layer.cornerRadius = addReviewButton.bounds.height / 2
     }
 }
 
@@ -69,19 +71,23 @@ extension ShowDetailsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        reviews.count
-        1
+        10
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ShowDetailsTableViewFirstCell", for: indexPath) as! ShowDetailsTableViewFirstCell
-        print("Pred ulazom sam")
-        if let show = show {
-            print("Usao sam")
-            cell.setUpCellUI(for: show)
-        }
-        print("Izvan ifa")
 
-        return cell
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ShowDetailsCell", for: indexPath) as! ShowDetailsCell
+            if let show = show {
+                cell.setUpCellUI(for: show)
+            }
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath) as! ReviewCell
+            cell.setUpCellUI(for: reviews[indexPath.row])
+            return cell
+        }
+
     }
 }
 
@@ -90,14 +96,29 @@ private extension ShowDetailsViewController {
     // MARK: - Setup Table View -
 
     func setUpTableView() {
-//        registerCells()
-//        tableView.delegate = self
-//        tableView.dataSource = self
-//    }
-//
-//    func registerCells() {
-//        let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
-//        tableView.register(cellNib, forCellReuseIdentifier: "ShowTitleTableViewCell")
+        registerCells()
+        configureRows()
+        removeSeparator()
+    }
+
+    func registerCells() {
+        let showDetailsCellNib = UINib(nibName: "ShowDetailsCell", bundle: nil)
+        tableView.register(showDetailsCellNib, forCellReuseIdentifier: "ShowDetailsCell")
+
+        let reviewCellNib = UINib(nibName: "ReviewCell", bundle: nil)
+        tableView.register(reviewCellNib, forCellReuseIdentifier: "ReviewCell")
+    }
+
+    func configureRows() {
+        tableView.estimatedRowHeight = 720
+        tableView.rowHeight = UITableView.automaticDimension
+
+        view.layoutIfNeeded()
+        tableView.layoutIfNeeded()
+    }
+
+    func removeSeparator() {
+        tableView.separatorColor = .clear;
     }
 }
 

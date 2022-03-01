@@ -18,20 +18,43 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cma-yE-BM1">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="707"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z6S-A6-xm4">
+                                <rect key="frame" x="0.0" y="751" width="414" height="96"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NP2-wl-GE9" customClass="CustomButton" customModule="TV_Shows" customModuleProvider="target">
+                                        <rect key="frame" x="24" y="24" width="366" height="48"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Add Review"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="NP2-wl-GE9" firstAttribute="top" secondItem="z6S-A6-xm4" secondAttribute="top" constant="24" id="AVt-VR-S4y"/>
+                                    <constraint firstAttribute="trailing" secondItem="NP2-wl-GE9" secondAttribute="trailing" constant="24" id="IYf-Id-AEG"/>
+                                    <constraint firstItem="NP2-wl-GE9" firstAttribute="leading" secondItem="z6S-A6-xm4" secondAttribute="leading" constant="24" id="VMh-Vs-ww5"/>
+                                    <constraint firstAttribute="bottom" secondItem="NP2-wl-GE9" secondAttribute="bottom" constant="24" id="hFR-oB-2cI"/>
+                                    <constraint firstAttribute="height" constant="96" id="pZq-yu-ttt"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="z6S-A6-xm4" firstAttribute="top" secondItem="cma-yE-BM1" secondAttribute="bottom" id="70L-NC-68J"/>
                             <constraint firstItem="cma-yE-BM1" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="CMy-JA-G2u"/>
+                            <constraint firstAttribute="bottom" secondItem="z6S-A6-xm4" secondAttribute="bottom" constant="49" id="Uqv-Za-Eze"/>
                             <constraint firstItem="cma-yE-BM1" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="bb2-M6-J8o"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="cma-yE-BM1" secondAttribute="bottom" id="m7E-pB-r2G"/>
+                            <constraint firstItem="z6S-A6-xm4" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="hCF-tq-hKh"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="cma-yE-BM1" secondAttribute="trailing" id="nfE-aV-8yE"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="z6S-A6-xm4" secondAttribute="trailing" id="oDa-DJ-nCm"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addReviewButton" destination="NP2-wl-GE9" id="met-mg-gHE"/>
                         <outlet property="tableView" destination="cma-yE-BM1" id="LcY-od-YVV"/>
                     </connections>
                 </viewController>

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ShowDetailsTableViewFirstCell: UITableViewCell {
+class ShowDetailsCell: UITableViewCell {
 
 
     required init?(coder aDecoder: NSCoder) {
@@ -21,20 +21,20 @@ class ShowDetailsTableViewFirstCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    }
 
-        // Configure the view for the selected state
+    override func layoutSubviews() {
+        showImage.layer.cornerRadius = 12
     }
     
 }
 
 // MARK: - Setup UI -
 
-extension ShowDetailsTableViewFirstCell {
+extension ShowDetailsCell {
     func setUpCellUI(for show: Show) {
         setUpImageView(url: show.imageURL ?? Constants.CommonURL.errorImageURL)
         setUpDescription(description: show.description ?? "No description available")

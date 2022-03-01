@@ -149,14 +149,10 @@ extension TopRatedViewController {
         switch navigationOption {
         case .showDetails:
             let storyboard = UIStoryboard(name: "ShowDetails", bundle: .main)
-            let ShowDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
-            ShowDetailsViewController.closure = { show in
-                ShowDetailsViewController.show = show
-            }
-            ShowDetailsViewController.closure?(show)
-            navigationController?.pushViewController(ShowDetailsViewController, animated: true)
+            let showDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
+            showDetailsViewController.show = show
+            navigationController?.pushViewController(showDetailsViewController, animated: true)
 
         }
     }
 }
-
