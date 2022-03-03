@@ -18,7 +18,7 @@ final class ShowDetailsViewController: UIViewController {
     @IBOutlet weak var addReviewButton: CustomButton!
     var reviews: [Review] = [] {
         didSet {
-
+            tableView.reloadData()
         }
     }
     var show: Show?
@@ -70,8 +70,7 @@ extension ShowDetailsViewController: UITableViewDelegate {
 extension ShowDetailsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        reviews.count
-        10
+        reviews.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -87,7 +86,6 @@ extension ShowDetailsViewController: UITableViewDataSource {
             cell.setUpCellUI(for: reviews[indexPath.row])
             return cell
         }
-
     }
 }
 
@@ -97,8 +95,7 @@ private extension ShowDetailsViewController {
 
     func setUpTableView() {
         registerCells()
-        configureRows()
-        removeSeparator()
+        disableSelection()
     }
 
     func registerCells() {
@@ -109,16 +106,8 @@ private extension ShowDetailsViewController {
         tableView.register(reviewCellNib, forCellReuseIdentifier: "ReviewCell")
     }
 
-    func configureRows() {
-        tableView.estimatedRowHeight = 720
-        tableView.rowHeight = UITableView.automaticDimension
-
-        view.layoutIfNeeded()
-        tableView.layoutIfNeeded()
-    }
-
-    func removeSeparator() {
-        tableView.separatorColor = .clear;
+    func disableSelection() {
+        tableView.allowsSelection = false
     }
 }
 

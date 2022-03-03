@@ -14,7 +14,7 @@ final class TopRatedViewController : UIViewController {
     // MARK: - Private properties -
     
     @IBOutlet private weak var tableView: UITableView!
-    lazy private var userButton: UIBarButtonItem = {
+    lazy private var rightNavigationButton: UIBarButtonItem = {
         let userButton = UIBarButtonItem(
             title: "",
             style: .plain,
@@ -78,7 +78,7 @@ private extension TopRatedViewController {
     }
     
     func addUserIcon() {
-        navigationItem.rightBarButtonItem = userButton
+        navigationItem.rightBarButtonItem = rightNavigationButton
     }
 }
 
@@ -125,6 +125,7 @@ extension TopRatedViewController: UITableViewDelegate {
         let show = listOfShows[indexPath.row]
         print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
         navigate(to: .showDetails, with: show)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
@@ -152,7 +153,6 @@ extension TopRatedViewController {
             let showDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
             showDetailsViewController.show = show
             navigationController?.pushViewController(showDetailsViewController, animated: true)
-
         }
     }
 }

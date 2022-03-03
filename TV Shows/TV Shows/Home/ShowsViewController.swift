@@ -20,10 +20,10 @@ final class ShowsViewController : UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     
-    lazy private var userButton: UIBarButtonItem = {
-        let userButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        userButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
-        return userButton
+    lazy private var rightNavigationButton: UIBarButtonItem = {
+        let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
+        return rightNavigationButton
     }()
     
     private var networkCallInProgress = false
@@ -95,7 +95,7 @@ private extension ShowsViewController {
     }
     
     func addRightNavigationButton() {
-        navigationItem.rightBarButtonItem = userButton
+        navigationItem.rightBarButtonItem = rightNavigationButton
     }
     
     

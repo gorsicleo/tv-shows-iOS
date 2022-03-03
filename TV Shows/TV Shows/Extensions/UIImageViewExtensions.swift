@@ -18,6 +18,6 @@ extension UIImageView {
     }
 
     func makeRounded() {
-        layer.cornerRadius = frame.size.width / 2
+        layer.cornerRadius = bounds.size.width / 2
     }
 }

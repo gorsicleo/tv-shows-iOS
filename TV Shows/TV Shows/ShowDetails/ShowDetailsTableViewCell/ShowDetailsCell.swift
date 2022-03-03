@@ -15,7 +15,9 @@ class ShowDetailsCell: UITableViewCell {
        }
 
     
+    @IBOutlet weak var showRatingLabel: UILabel!
     @IBOutlet weak var showImage: UIImageView!
+    @IBOutlet weak var showRating: RatingView!
     @IBOutlet weak var showDescription: UILabel!
 
     
@@ -38,6 +40,18 @@ extension ShowDetailsCell {
     func setUpCellUI(for show: Show) {
         setUpImageView(url: show.imageURL ?? Constants.CommonURL.errorImageURL)
         setUpDescription(description: show.description ?? "No description available")
+        setUpRatingView(rating: show.averageRating ?? 0)
+        setUpRatingLabel(show: show)
+    }
+
+    private func setUpRatingLabel(show: Show) {
+        showRatingLabel.text = "\(show.numberOfReviews) REVIEWS, \(show.averageRating ?? 0) AVERAGE"
+    }
+
+    private func setUpRatingView(rating: Int) {
+        showRating.configure(withStyle: .large)
+        showRating.isEnabled = false
+        showRating.rating = rating
     }
 
     private func setUpImageView(url: String) {

@@ -24,12 +24,10 @@ class ReviewCell: UITableViewCell {
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     override func layoutSubviews() {
+        super.layoutSubviews()
         reviewerIcon.makeRounded()
     }
     
@@ -57,6 +55,7 @@ extension ReviewCell {
 
     private func setUpReviewerRating(rating: Int) {
         reviewerRating.rating = rating
+        reviewerRating.isEnabled = false
     }
 
     private func setUpReviewerReview(review: String) {
