@@ -194,8 +194,8 @@ private extension LoginViewController {
                     guard let headers = response.response?.headers.dictionary else { return }
                     self.handleSuccesfulLogin(for: payload.user,headers: headers)
                     break;
-                case .failure(let error) :
-                    self.handleFailedLogin(error)
+                case .failure :
+                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.loginFailed)
                     break
                 }
         }
@@ -214,8 +214,8 @@ private extension LoginViewController {
                     guard let headers = response.response?.headers.dictionary else { return }
                     self.handleSuccesfulRegister(for: payload.user,headers: headers)
                     break;
-                case .failure(let error) :
-                    self.handleFailedRegister(error)
+                case .failure:
+                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.registerFailed)
                     break
                 }
         }
@@ -245,12 +245,12 @@ private extension LoginViewController {
         SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.resgisterSuccesful)
     }
     
-    func handleFailedLogin(_ error: AFError) {
-        SVProgressHUD.showError(withStatus: Constants.AlertMessages.loginFailed)
-    }
-    
-    func handleFailedRegister(_ error: AFError) {
-        SVProgressHUD.showError(withStatus: Constants.AlertMessages.registerFailed)
+    func handleFailedResponse(_ data: Data?, defaultValue: String) {
+        let errors = ErrorDecoder.decode(from: data, defaultValue: defaultValue)
+        for error in errors {
+            SVProgressHUD.showError(withStatus: error)
+        }
+
     }
 }
 

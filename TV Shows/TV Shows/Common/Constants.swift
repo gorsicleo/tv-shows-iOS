@@ -30,10 +30,10 @@ enum Constants {
     // MARK: - Alert messages -
     
     enum AlertMessages {
-        static let loginFailed = "Login failed: Please check your email and password."
+        static let loginFailed = "Login failed: Took to long for server to respond"
         static let loginSuccesful = "Login successful"
         static let resgisterSuccesful = "Register success. Log in to continue."
-        static let registerFailed = "Registration failed. Please use different email."
+        static let registerFailed = "Registration failed: Took to long for server to respond"
         static let missingHeaders = "Missing headers"
         static let networkError = "Can't connect to the server. Please check your connection"
     }

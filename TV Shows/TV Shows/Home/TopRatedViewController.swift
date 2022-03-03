@@ -98,8 +98,8 @@ private extension TopRatedViewController {
                         self.handleSuccess(shows: payload.shows)
                         break
                     
-                    case .failure(let error) :
-                        self.handleFailure(error: error)
+                    case .failure :
+                        self.handleFailure()
                         break
                     }
         }
@@ -112,7 +112,7 @@ private extension TopRatedViewController {
         listOfShows.append(contentsOf: shows)
     }
     
-    func handleFailure(error: AFError) {
+    func handleFailure() {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
@@ -123,7 +123,6 @@ extension TopRatedViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let show = listOfShows[indexPath.row]
-        print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
         navigate(to: .showDetails, with: show)
         tableView.deselectRow(at: indexPath, animated: false)
     }
@@ -132,7 +131,7 @@ extension TopRatedViewController: UITableViewDelegate {
 extension TopRatedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        listOfShows.count
+        return listOfShows.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

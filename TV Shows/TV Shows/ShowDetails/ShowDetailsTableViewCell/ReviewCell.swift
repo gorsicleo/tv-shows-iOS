@@ -23,9 +23,6 @@ class ReviewCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
         reviewerIcon.makeRounded()
@@ -61,6 +58,4 @@ extension ReviewCell {
     private func setUpReviewerReview(review: String) {
         reviewerReview.text = review
     }
-
-
 }

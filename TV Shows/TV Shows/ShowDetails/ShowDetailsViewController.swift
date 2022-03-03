@@ -128,8 +128,8 @@ private extension ShowDetailsViewController {
                         self.handleSuccess(reviews: payload.reviews)
                         break
 
-                    case .failure(let error) :
-                        self.handleFailure(error: error)
+                    case .failure :
+                        self.handleFailure()
                         break
                     }
         }
@@ -142,7 +142,8 @@ private extension ShowDetailsViewController {
         self.reviews = reviews
     }
 
-    func handleFailure(error: AFError) {
+    func handleFailure() {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
+

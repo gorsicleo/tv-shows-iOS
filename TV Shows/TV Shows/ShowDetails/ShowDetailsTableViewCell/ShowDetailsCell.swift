@@ -9,11 +9,9 @@ import UIKit
 
 class ShowDetailsCell: UITableViewCell {
 
-
     required init?(coder aDecoder: NSCoder) {
            super.init(coder: aDecoder)
        }
-
     
     @IBOutlet weak var showRatingLabel: UILabel!
     @IBOutlet weak var showImage: UIImageView!
@@ -25,13 +23,10 @@ class ShowDetailsCell: UITableViewCell {
         super.awakeFromNib()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-    }
-
     override func layoutSubviews() {
+        // I intentionally did not call the method super.layoutSubviews because it will draw separator line
         showImage.layer.cornerRadius = 12
     }
-    
 }
 
 // MARK: - Setup UI -
@@ -57,11 +52,9 @@ extension ShowDetailsCell {
     private func setUpImageView(url: String) {
         guard let showImageURL = URL(string: url) else { return }
         showImage.loadImageFromNetwork(url: showImageURL)
-        print("Postavio sam sliku")
     }
 
     private func setUpDescription(description: String) {
         showDescription.text = description
-        print("Postavio sam opis")
     }
 }

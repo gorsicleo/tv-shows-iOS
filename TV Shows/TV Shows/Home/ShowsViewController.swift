@@ -119,8 +119,8 @@ private extension ShowsViewController {
                         self.numberOfPages = payload.meta.pagination.pages
                         break
                         
-                    case .failure(let error) :
-                        self.handleFailure(error: error)
+                    case .failure :
+                        self.handleFailure()
                         break
                     }
                 }
@@ -143,7 +143,7 @@ private extension ShowsViewController {
         tableView.tableFooterView = nil
     }
     
-    func handleFailure(error: AFError) {
+    func handleFailure() {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
@@ -151,10 +151,11 @@ private extension ShowsViewController {
 // MARK: - Table View delegates -
 
 extension ShowsViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let show = listOfShows[indexPath.row]
-        print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
+        navigate(to: .showDetails, with: show)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
@@ -179,6 +180,21 @@ extension ShowsViewController: UIScrollViewDelegate {
                 frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100)
             )
             fetchShowsFromAPI(router: .shows(items: numberOfShowsPerPage, page: currentPage))
+        }
+    }
+}
+
+// MARK: - Navigation -
+
+extension ShowsViewController {
+
+    func navigate(to navigationOption: HomeNavigationOption, with show: Show) {
+        switch navigationOption {
+        case .showDetails:
+            let storyboard = UIStoryboard(name: "ShowDetails", bundle: .main)
+            let showDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
+            showDetailsViewController.show = show
+            navigationController?.pushViewController(showDetailsViewController, animated: true)
         }
     }
 }
