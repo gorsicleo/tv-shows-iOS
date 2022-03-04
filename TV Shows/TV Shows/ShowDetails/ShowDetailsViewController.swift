@@ -12,10 +12,10 @@ import SVProgressHUD
 
 final class ShowDetailsViewController: UIViewController {
 
-    @IBOutlet weak var showImage: UIImageView!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var showDescription: UITextView!
-    @IBOutlet weak var addReviewButton: CustomButton!
+    @IBOutlet private weak var showImage: UIImageView!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var showDescription: UITextView!
+    @IBOutlet private weak var addReviewButton: CustomButton!
     var reviews: [Review] = [] {
         didSet {
             tableView.reloadData()
@@ -24,6 +24,18 @@ final class ShowDetailsViewController: UIViewController {
     var show: Show?
 
 
+    @IBAction func addReviewAction(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "WriteReview", bundle: .main)
+        let writeReviewController = storyboard.instantiateViewController(withIdentifier: "WriteReviewViewController") as! WriteReviewController
+
+        writeReviewController.title = "Write a Review"
+        let leftNavigationButton = UIBarButtonItem()
+        writeReviewController.navigationItem.setLeftBarButtonItems([leftNavigationButton], animated: false)
+        writeReviewController.navigationItem.leftBarButtonItem?.title = "Close"
+        writeReviewController.navigationItem.leftBarButtonItem?.tintColor = Constants.Colors.mainRedColor
+        let navigationController = UINavigationController(rootViewController: writeReviewController)
+        present(navigationController, animated: true)
+    }
     // MARK: - ViewController Life Cycle
 
     override func viewDidLoad() {
@@ -56,7 +68,7 @@ private extension ShowDetailsViewController {
 
     func setUpReviewButton() {
         addReviewButton.setBackgroundColor(Constants.Colors.mainRedColor, for: .normal)
-        addReviewButton.layer.cornerRadius = addReviewButton.bounds.height / 2
+        addReviewButton.makeRounded()
     }
 }
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ShowDetailsCell: UITableViewCell {
+final class ShowDetailsCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
            super.init(coder: aDecoder)

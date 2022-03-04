@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ReviewCell: UITableViewCell {
+final class ReviewCell: UITableViewCell {
 
     @IBOutlet weak var reviewerEmail: UILabel!
     @IBOutlet weak var reviewerRating: RatingView!

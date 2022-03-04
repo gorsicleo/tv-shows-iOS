@@ -21,6 +21,7 @@ enum Constants {
     // MARK: - Colors-
     
     enum Colors {
+        static let textViewBacgroundColor = UIColor(rgb: 0xf2f2f2)
         static let mainRedColor = UIColor(rgb: 0x800000)
         static let disabledMainColor = UIColor(rgb: 0xaf4141)
         static let disabledTitleColor = UIColor(rgb: 0xc4c4c4)
