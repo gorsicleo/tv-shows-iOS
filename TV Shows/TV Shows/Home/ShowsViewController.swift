@@ -37,7 +37,7 @@ final class ShowsViewController : UIViewController {
         }
     }
     
-    // MARK: - ViewController Life Cycle
+    // MARK: - ViewController Life Cycle -
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,11 +84,11 @@ private extension ShowsViewController {
     
     func setUpUI() {
         colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
-        hidebackButton()
+        hideBackButton()
         addRightNavigationButton()
     }
     
-    func hidebackButton() {
+    func hideBackButton() {
         navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.setViewControllers([self], animated: true)
         navigationController?.navigationBar.barTintColor = .red

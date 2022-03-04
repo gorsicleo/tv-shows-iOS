@@ -8,33 +8,91 @@
 import Foundation
 import UIKit
 
-final class WriteReviewController: UIViewController, UITextViewDelegate {
-    @IBOutlet weak var submitButton: CustomButton!
-    @IBOutlet weak var reviewTextField: UITextView!
+final class WriteReviewController: UIViewController {
+
+    // MARK: - Private properties -
+
+    @IBOutlet private weak var submitButton: CustomButton!
+    @IBOutlet private weak var reviewTextView: UITextView!
+
+    // MARK: - ViewController Life Cycle -
 
     override func viewDidLoad() {
         addGestureRecognier()
-        submitButton.setBackgroundColor(Constants.Colors.mainRedColor, for: .normal)
-        submitButton.makeRounded()
-        reviewTextField.layer.cornerRadius = 10
-        reviewTextField.backgroundColor = Constants.Colors.textViewBacgroundColor
-        reviewTextField.text = "Enter your comment here"
-        reviewTextField.textColor = UIColor.lightGray
-        reviewTextField.delegate = self
+        setUpUI()
+        reviewTextView.delegate = self
+    }
 
+    override func viewWillAppear(_ animated: Bool) {
+        setUpNavigationBar()
+    }
+}
+
+// MARK: - Setup UI -
+
+private extension WriteReviewController {
+
+    func setUpNavigationBar() {
+        title = "Write a Review"
+        addLeftNavigationButton()
+    }
+
+    func addLeftNavigationButton() {
+
+        let leftNavigationButton = UIBarButtonItem(
+            title: "Close",
+            style: .plain,
+            target: self,
+            action: #selector(closeButtonClicked(sender:))
+        )
+        navigationItem.leftBarButtonItem?.tintColor = Constants.Colors.mainRedColor
+        navigationItem.setLeftBarButtonItems([leftNavigationButton], animated: false)
 
     }
+
+    @objc func closeButtonClicked(sender: UIButton){
+        dismiss(animated: true)
+    }
+
+    func setUpUI() {
+        setUpButton()
+        setUpTextView()
+    }
+
+    func setUpButton() {
+        submitButton.setBackgroundColor(Constants.Colors.mainRedColor, for: .normal)
+        submitButton.makeRounded()
+    }
+
+    func setUpTextView() {
+        reviewTextView.layer.cornerRadius = 10
+        reviewTextView.backgroundColor = Constants.Colors.textViewBacgroundColor
+        setUpPlaceholderText()
+    }
+
+    func setUpPlaceholderText() {
+        reviewTextView.text = "Enter your comment here"
+        reviewTextView.textColor = UIColor.lightGray
+    }
+
+    func removePlaceholderText() {
+        reviewTextView.text = nil
+        reviewTextView.textColor = UIColor.black
+    }
+}
+// MARK: - Setup Text View -
+
+extension WriteReviewController: UITextViewDelegate {
+
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.lightGray {
-            textView.text = nil
-            textView.textColor = UIColor.black
+        if textView.textColor == .lightGray {
+            removePlaceholderText()
         }
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "Enter your comment here"
-            textView.textColor = UIColor.lightGray
+            setUpPlaceholderText()
         }
     }
 
@@ -46,6 +104,4 @@ final class WriteReviewController: UIViewController, UITextViewDelegate {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
-
-    
 }

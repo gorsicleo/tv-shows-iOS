@@ -28,11 +28,7 @@ final class ShowDetailsViewController: UIViewController {
         let storyboard = UIStoryboard(name: "WriteReview", bundle: .main)
         let writeReviewController = storyboard.instantiateViewController(withIdentifier: "WriteReviewViewController") as! WriteReviewController
 
-        writeReviewController.title = "Write a Review"
-        let leftNavigationButton = UIBarButtonItem()
-        writeReviewController.navigationItem.setLeftBarButtonItems([leftNavigationButton], animated: false)
-        writeReviewController.navigationItem.leftBarButtonItem?.title = "Close"
-        writeReviewController.navigationItem.leftBarButtonItem?.tintColor = Constants.Colors.mainRedColor
+        
         let navigationController = UINavigationController(rootViewController: writeReviewController)
         present(navigationController, animated: true)
     }
