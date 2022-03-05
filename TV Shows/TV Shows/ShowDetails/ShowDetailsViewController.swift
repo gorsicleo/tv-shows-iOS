@@ -28,7 +28,13 @@ final class ShowDetailsViewController: UIViewController {
         let storyboard = UIStoryboard(name: "WriteReview", bundle: .main)
         let writeReviewController = storyboard.instantiateViewController(withIdentifier: "WriteReviewViewController") as! WriteReviewController
 
-        
+        writeReviewController.show = show
+        writeReviewController.completionHandler = { [weak self] review in
+            guard let self = self else { return }
+
+            self.reviews.append(review)
+            self.tableView.reloadData()
+        }
         let navigationController = UINavigationController(rootViewController: writeReviewController)
         present(navigationController, animated: true)
     }

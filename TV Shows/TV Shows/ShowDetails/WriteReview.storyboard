@@ -61,6 +61,9 @@
                                                         <buttonConfiguration key="configuration" style="plain" title="Submit">
                                                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </buttonConfiguration>
+                                                        <connections>
+                                                            <action selector="submitButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="xK1-dw-oke"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -94,6 +97,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="KqB-EM-W6K"/>
                     <connections>
+                        <outlet property="ratingView" destination="yzK-MK-flp" id="cT7-9O-aSn"/>
                         <outlet property="reviewTextView" destination="xdb-Hp-FLe" id="8Iv-qV-JcW"/>
                         <outlet property="submitButton" destination="yLh-GZ-D8p" id="eMt-kg-RYg"/>
                     </connections>

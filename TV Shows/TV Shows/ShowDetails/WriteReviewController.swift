@@ -7,13 +7,20 @@
 
 import Foundation
 import UIKit
+import SVProgressHUD
 
 final class WriteReviewController: UIViewController {
 
     // MARK: - Private properties -
 
+    @IBOutlet weak var ratingView: RatingView!
     @IBOutlet private weak var submitButton: CustomButton!
     @IBOutlet private weak var reviewTextView: UITextView!
+
+    var show: Show?
+
+    var completionHandler: ((Review) -> Void)?
+
 
     // MARK: - ViewController Life Cycle -
 
@@ -103,5 +110,56 @@ extension WriteReviewController: UITextViewDelegate {
 
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: - IBAction -
+
+private extension WriteReviewController {
+
+    @IBAction func submitButtonAction(_ sender: Any) {
+        sendApiCallAddReview(comment: reviewTextView.text, rating: ratingView.rating)
+    }
+}
+
+// MARK: - API Call -
+
+private extension WriteReviewController {
+
+    func sendApiCallAddReview(comment: String?, rating: Int) {
+
+        guard let showId = show?.id, let showId = Int(showId), let comment = comment else { return }
+        SVProgressHUD.show()
+        APIManager
+            .shared
+            .call(router: .createReview(showId: showId, comment: comment, rating: rating), responseType: ReviewResponse.self) { [weak self] response in
+                SVProgressHUD.dismiss()
+                guard let self = self else { return }
+
+                switch response.result {
+                case .success(let payload) :
+                    self.handleSuccess(review: payload.review)
+                    break;
+                case .failure :
+                    self.handleFailure(response.data, defaultValue: Constants.AlertMessages.networkError)
+                    break
+                }
+        }
+    }
+}
+
+private extension WriteReviewController {
+
+    func handleSuccess(review: Review) {
+        completionHandler?(review)
+        dismiss(animated: true)
+    }
+
+    func handleFailure(_ data: Data?, defaultValue: String) {
+        let errors = ErrorDecoder.decode(from: data, defaultValue: defaultValue)
+        for error in errors {
+            SVProgressHUD.showError(withStatus: error)
+        }
+
     }
 }

@@ -60,6 +60,8 @@ enum Router {
             return UserRegisterRequest(email: email, password: password).encode()
         case .shows(let items, let page):
             return ["page": page, "items": items]
+        case .createReview(let showId, let comment, let rating):
+            return ["show_id": showId, "comment": comment, "rating": rating]
         default:
             return [:]
         }
