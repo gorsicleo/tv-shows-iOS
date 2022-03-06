@@ -62,7 +62,7 @@
                                                             <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </buttonConfiguration>
                                                         <connections>
-                                                            <action selector="submitButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="xK1-dw-oke"/>
+                                                            <action selector="submitButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="5hy-46-LAE"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>

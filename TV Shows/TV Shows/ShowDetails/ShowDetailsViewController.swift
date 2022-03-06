@@ -33,8 +33,6 @@ final class ShowDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
         setUpTableView()
         setUpReviewButton()
         if let showId = show?.id {
@@ -102,6 +100,8 @@ private extension ShowDetailsViewController {
     func setUpTableView() {
         registerCells()
         disableSelection()
+        tableView.delegate = self
+        tableView.dataSource = self
     }
 
     func registerCells() {
@@ -140,7 +140,6 @@ private extension ShowDetailsViewController {
         return storyboard.instantiateViewController(withIdentifier: "WriteReviewViewController") as! WriteReviewController
     }
 }
-
 
 // MARK: - API Call -
 

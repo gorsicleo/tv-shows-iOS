@@ -77,7 +77,6 @@ private extension TopRatedViewController {
     }
 }
 
-
 // MARK: - Setup Table View -
 
 private extension TopRatedViewController {

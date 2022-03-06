@@ -27,7 +27,6 @@ final class WriteReviewController: UIViewController {
     override func viewDidLoad() {
         addGestureRecognier()
         setUpUI()
-        reviewTextView.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -71,13 +70,14 @@ private extension WriteReviewController {
     }
 
     func setUpTextView() {
+        reviewTextView.delegate = self
         reviewTextView.layer.cornerRadius = 10
         reviewTextView.backgroundColor = Constants.Colors.textViewBacgroundColor
         setUpPlaceholderText()
     }
 
     func setUpPlaceholderText() {
-        reviewTextView.text = "Enter your comment here"
+        reviewTextView.text = "Enter your comment here..."
         reviewTextView.textColor = UIColor.lightGray
     }
 
@@ -118,7 +118,8 @@ extension WriteReviewController: UITextViewDelegate {
 private extension WriteReviewController {
 
     @IBAction func submitButtonAction(_ sender: Any) {
-        sendApiCallAddReview(comment: reviewTextView.text, rating: ratingView.rating)
+        let comment = reviewTextView.text == "Enter your comment here..." ? "" : reviewTextView.text
+        sendApiCallAddReview(comment: comment, rating: ratingView.rating)
     }
 }
 

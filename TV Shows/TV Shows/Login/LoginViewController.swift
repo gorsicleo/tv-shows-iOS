@@ -195,7 +195,7 @@ private extension LoginViewController {
                     self.handleSuccesfulLogin(for: payload.user,headers: headers)
                     break;
                 case .failure :
-                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.loginFailed)
+                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.networkError)
                     break
                 }
         }
@@ -215,7 +215,7 @@ private extension LoginViewController {
                     self.handleSuccesfulRegister(for: payload.user,headers: headers)
                     break;
                 case .failure:
-                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.registerFailed)
+                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.networkError)
                     break
                 }
         }
