@@ -19,11 +19,7 @@ final class ShowsViewController : UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     
-    lazy private var rightNavigationButton: UIBarButtonItem = {
-        let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
-        return rightNavigationButton
-    }()
+    lazy private var rightNavigationButton: UIBarButtonItem = createRightNavigationButton()
     
     private var networkCallInProgress = false
     private var currentPage = 1
@@ -58,6 +54,12 @@ private extension ShowsViewController {
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
+    func createRightNavigationButton() -> UIBarButtonItem {
+            let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+            rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
+            return rightNavigationButton
     }
 }
 

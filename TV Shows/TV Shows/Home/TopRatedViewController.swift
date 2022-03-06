@@ -14,20 +14,7 @@ final class TopRatedViewController : UIViewController {
     // MARK: - Private properties -
     
     @IBOutlet private weak var tableView: UITableView!
-    lazy private var rightNavigationButton: UIBarButtonItem = {
-        let userButton = UIBarButtonItem(
-            title: "",
-            style: .plain,
-            target: self,
-            action: nil
-        )
-        userButton.setBackgroundImage(
-            UIImage(named: "userIcon"),
-            for: .normal,
-            barMetrics: .default
-        )
-        return userButton
-    }()
+    lazy private var rightNavigationButton: UIBarButtonItem = createRightNavigationButton()
 
     // MARK: - Public properties -
     
@@ -62,6 +49,12 @@ final class TopRatedViewController : UIViewController {
 private extension TopRatedViewController {
     
     // MARK: - Setup UI -
+
+    func createRightNavigationButton() -> UIBarButtonItem {
+            let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+            rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
+            return rightNavigationButton
+    }
 
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
