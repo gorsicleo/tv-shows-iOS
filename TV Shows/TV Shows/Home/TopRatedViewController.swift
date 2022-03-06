@@ -28,6 +28,8 @@ final class TopRatedViewController : UIViewController {
         )
         return userButton
     }()
+
+    // MARK: - Public properties -
     
     var listOfShows: [Show] = [] {
         didSet {
@@ -39,19 +41,14 @@ final class TopRatedViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
-        tableView.register(cellNib, forCellReuseIdentifier: "ShowTitleTableViewCell")
-        fetchShowsFromAPI(router: Router.topRated)
+        setUpTableView()
         setUpUI()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+        fetchShowsFromAPI(router: Router.topRated)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
+        setUpNavigationBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,9 +62,14 @@ final class TopRatedViewController : UIViewController {
 private extension TopRatedViewController {
     
     // MARK: - Setup UI -
+
+    func setUpNavigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
+    }
     
     func setUpUI() {
-        colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
         hidebackButton()
         addUserIcon()
     }
@@ -79,6 +81,23 @@ private extension TopRatedViewController {
     
     func addUserIcon() {
         navigationItem.rightBarButtonItem = rightNavigationButton
+    }
+}
+
+
+// MARK: - Setup Table View -
+
+private extension TopRatedViewController {
+
+    func setUpTableView() {
+        registerCells()
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+
+    func registerCells() {
+        let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "ShowTitleTableViewCell")
     }
 }
 

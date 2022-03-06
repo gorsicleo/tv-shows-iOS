@@ -9,25 +9,23 @@ import UIKit
 
 final class ReviewCell: UITableViewCell {
 
-    @IBOutlet weak var reviewerEmail: UILabel!
-    @IBOutlet weak var reviewerRating: RatingView!
-    @IBOutlet weak var reviewerReview: UILabel!
-    @IBOutlet weak var reviewerIcon: UIImageView!
+    // MARK: - Private properties -
+
+    @IBOutlet private weak var reviewerEmail: UILabel!
+    @IBOutlet private weak var reviewerRating: RatingView!
+    @IBOutlet private weak var reviewerReview: UILabel!
+    @IBOutlet private weak var reviewerIcon: UIImageView!
 
     required init?(coder aDecoder: NSCoder) {
            super.init(coder: aDecoder)
        }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    // MARK: - Nib lifecycle -
 
     override func layoutSubviews() {
         super.layoutSubviews()
         reviewerIcon.makeRounded()
     }
-    
 }
 
 // MARK: - Setup UI -
@@ -42,7 +40,6 @@ extension ReviewCell {
 
     private func setUpReviewerIcon(url: String?) {
         guard let url = url else { return }
-
         reviewerIcon.loadImageFromNetwork(url: URL(string: url)!)
     }
 

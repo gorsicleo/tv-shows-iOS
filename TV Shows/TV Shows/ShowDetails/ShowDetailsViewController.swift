@@ -12,32 +12,23 @@ import SVProgressHUD
 
 final class ShowDetailsViewController: UIViewController {
 
+    // MARK: - Private Properties -
+
     @IBOutlet private weak var showImage: UIImageView!
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var showDescription: UITextView!
     @IBOutlet private weak var addReviewButton: CustomButton!
+
+    // MARK: - Public Properties -
+
     var reviews: [Review] = [] {
         didSet {
             tableView.reloadData()
         }
     }
+
     var show: Show?
 
-
-    @IBAction func addReviewAction(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "WriteReview", bundle: .main)
-        let writeReviewController = storyboard.instantiateViewController(withIdentifier: "WriteReviewViewController") as! WriteReviewController
-
-        writeReviewController.show = show
-        writeReviewController.completionHandler = { [weak self] review in
-            guard let self = self else { return }
-
-            self.reviews.append(review)
-            self.tableView.reloadData()
-        }
-        let navigationController = UINavigationController(rootViewController: writeReviewController)
-        present(navigationController, animated: true)
-    }
     // MARK: - ViewController Life Cycle
 
     override func viewDidLoad() {
@@ -49,7 +40,6 @@ final class ShowDetailsViewController: UIViewController {
         if let showId = show?.id {
             fetchShowsFromAPI(router: .reviews(showId: showId))
         }
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -74,17 +64,19 @@ private extension ShowDetailsViewController {
     }
 }
 
+// MARK: - Table View delegates -
+
 extension ShowDetailsViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
     }
 }
 
 extension ShowDetailsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        reviews.count
+        return reviews.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -103,9 +95,9 @@ extension ShowDetailsViewController: UITableViewDataSource {
     }
 }
 
-private extension ShowDetailsViewController {
+// MARK: - Setup Table View -
 
-    // MARK: - Setup Table View -
+private extension ShowDetailsViewController {
 
     func setUpTableView() {
         registerCells()
@@ -125,6 +117,30 @@ private extension ShowDetailsViewController {
     }
 }
 
+// MARK: - IBAction -
+
+private extension ShowDetailsViewController {
+
+    @IBAction func addReviewAction(_ sender: Any) {
+        let writeReviewController = instantiateWriteReviewViewController()
+        writeReviewController.show = show
+
+        writeReviewController.completionHandler = { [weak self] review in
+            guard let self = self else { return }
+            self.reviews.append(review)
+            self.tableView.reloadData()
+        }
+
+        let navigationController = UINavigationController(rootViewController: writeReviewController)
+        present(navigationController, animated: true)
+    }
+
+    func instantiateWriteReviewViewController() -> WriteReviewController {
+        let storyboard = UIStoryboard(name: "WriteReview", bundle: .main)
+        return storyboard.instantiateViewController(withIdentifier: "WriteReviewViewController") as! WriteReviewController
+    }
+}
+
 
 // MARK: - API Call -
 
@@ -141,7 +157,6 @@ private extension ShowDetailsViewController {
                     case .success(let payload) :
                         self.handleSuccess(reviews: payload.reviews)
                         break
-
                     case .failure :
                         self.handleFailure()
                         break
@@ -149,6 +164,8 @@ private extension ShowDetailsViewController {
         }
     }
 }
+
+// MARK: - API Response Handlers -
 
 private extension ShowDetailsViewController {
 
@@ -160,4 +177,3 @@ private extension ShowDetailsViewController {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
-

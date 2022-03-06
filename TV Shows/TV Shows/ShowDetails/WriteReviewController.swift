@@ -13,14 +13,14 @@ final class WriteReviewController: UIViewController {
 
     // MARK: - Private properties -
 
-    @IBOutlet weak var ratingView: RatingView!
+    @IBOutlet private weak var ratingView: RatingView!
     @IBOutlet private weak var submitButton: CustomButton!
     @IBOutlet private weak var reviewTextView: UITextView!
 
+    // MARK: - public properties -
+
     var show: Show?
-
     var completionHandler: ((Review) -> Void)?
-
 
     // MARK: - ViewController Life Cycle -
 
@@ -54,7 +54,6 @@ private extension WriteReviewController {
         )
         navigationItem.leftBarButtonItem?.tintColor = Constants.Colors.mainRedColor
         navigationItem.setLeftBarButtonItems([leftNavigationButton], animated: false)
-
     }
 
     @objc func closeButtonClicked(sender: UIButton){
@@ -87,6 +86,7 @@ private extension WriteReviewController {
         reviewTextView.textColor = UIColor.black
     }
 }
+
 // MARK: - Setup Text View -
 
 extension WriteReviewController: UITextViewDelegate {
@@ -135,7 +135,6 @@ private extension WriteReviewController {
             .call(router: .createReview(showId: showId, comment: comment, rating: rating), responseType: ReviewResponse.self) { [weak self] response in
                 SVProgressHUD.dismiss()
                 guard let self = self else { return }
-
                 switch response.result {
                 case .success(let payload) :
                     self.handleSuccess(review: payload.review)
@@ -147,6 +146,8 @@ private extension WriteReviewController {
         }
     }
 }
+
+// MARK: - API Response Handlers -
 
 private extension WriteReviewController {
 
@@ -160,6 +161,5 @@ private extension WriteReviewController {
         for error in errors {
             SVProgressHUD.showError(withStatus: error)
         }
-
     }
 }

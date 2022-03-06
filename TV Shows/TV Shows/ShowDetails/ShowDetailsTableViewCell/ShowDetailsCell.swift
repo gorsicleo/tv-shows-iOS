@@ -9,19 +9,18 @@ import UIKit
 
 final class ShowDetailsCell: UITableViewCell {
 
+    // MARK: - Private properties -
+    
+    @IBOutlet private weak var showRatingLabel: UILabel!
+    @IBOutlet private weak var showImage: UIImageView!
+    @IBOutlet private weak var showRating: RatingView!
+    @IBOutlet private weak var showDescription: UILabel!
+
     required init?(coder aDecoder: NSCoder) {
            super.init(coder: aDecoder)
        }
-    
-    @IBOutlet weak var showRatingLabel: UILabel!
-    @IBOutlet weak var showImage: UIImageView!
-    @IBOutlet weak var showRating: RatingView!
-    @IBOutlet weak var showDescription: UILabel!
 
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    // MARK: - Nib lifecycle -
 
     override func layoutSubviews() {
         // I intentionally did not call the method super.layoutSubviews because it will draw separator line

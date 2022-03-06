@@ -7,7 +7,6 @@
 
 import UIKit
 import Alamofire
-import Kingfisher
 import SVProgressHUD
 
 enum HomeNavigationOption {
@@ -97,8 +96,6 @@ private extension ShowsViewController {
     func addRightNavigationButton() {
         navigationItem.rightBarButtonItem = rightNavigationButton
     }
-    
-    
 }
 
 // MARK: - API Call -
@@ -118,7 +115,6 @@ private extension ShowsViewController {
                         self.handleSuccess(shows: payload.shows)
                         self.numberOfPages = payload.meta.pagination.pages
                         break
-                        
                     case .failure :
                         self.handleFailure()
                         break
