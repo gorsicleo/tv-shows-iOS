@@ -38,6 +38,7 @@ final class ShowsViewController : UIViewController {
         super.viewDidLoad()
         setUpTableView()
         setUpUI()
+        setUpRefreshControl()
         fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
     }
     
@@ -50,6 +51,17 @@ final class ShowsViewController : UIViewController {
 // MARK: - Extensions -
 
 private extension ShowsViewController {
+
+    func setUpRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refreshHandler), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+
+    @objc func refreshHandler() {
+        fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
+        tableView.refreshControl?.endRefreshing()
+    }
     
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)

@@ -35,6 +35,7 @@ final class ShowDetailsViewController: UIViewController {
         super.viewDidLoad()
         setUpTableView()
         setUpReviewButton()
+        setUpRefreshControl()
         if let showId = show?.id {
             fetchShowsFromAPI(router: .reviews(showId: showId))
         }
@@ -49,6 +50,19 @@ final class ShowDetailsViewController: UIViewController {
 // MARK: - Extensions -
 
 private extension ShowDetailsViewController {
+
+    func setUpRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refreshHandler), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+
+    @objc func refreshHandler() {
+        if let showId = show?.id {
+            fetchShowsFromAPI(router: .reviews(showId: showId))
+        }
+        tableView.refreshControl?.endRefreshing()
+    }
 
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)

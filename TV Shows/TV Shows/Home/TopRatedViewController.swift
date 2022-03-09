@@ -30,7 +30,8 @@ final class TopRatedViewController : UIViewController {
         super.viewDidLoad()
         setUpTableView()
         setUpUI()
-        fetchShowsFromAPI(router: Router.topRated)
+        setUpRefreshControl()
+        fetchShowsFromAPI(router: .topRated)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,6 +48,17 @@ final class TopRatedViewController : UIViewController {
 // MARK: - Extensions -
 
 private extension TopRatedViewController {
+
+    func setUpRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refreshHandler), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+
+    @objc func refreshHandler() {
+        fetchShowsFromAPI(router: .topRated)
+        tableView.refreshControl?.endRefreshing()
+    }
     
     // MARK: - Setup UI -
 
