@@ -25,13 +25,21 @@ final class WriteReviewController: UIViewController {
     // MARK: - ViewController Life Cycle -
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         addGestureRecognier()
         setUpUI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setUpNavigationBar()
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setUpCornerRadius()
+    }
+
 }
 
 // MARK: - Setup UI -
@@ -66,14 +74,17 @@ private extension WriteReviewController {
 
     func setUpButton() {
         submitButton.setBackgroundColor(Constants.Colors.mainRedColor, for: .normal)
-        submitButton.makeRounded()
     }
 
     func setUpTextView() {
         reviewTextView.delegate = self
-        reviewTextView.layer.cornerRadius = 10
         reviewTextView.backgroundColor = Constants.Colors.textViewBacgroundColor
         setUpPlaceholderText()
+    }
+
+    func setUpCornerRadius() {
+        reviewTextView.layer.cornerRadius = 10
+        submitButton.makeRounded()
     }
 
     func setUpPlaceholderText() {
@@ -159,8 +170,6 @@ private extension WriteReviewController {
 
     func handleFailure(_ data: Data?, defaultValue: String) {
         let errors = ErrorDecoder.decode(from: data, defaultValue: defaultValue)
-        for error in errors {
-            SVProgressHUD.showError(withStatus: error)
-        }
+        errors.forEach { SVProgressHUD.showError(withStatus: $0) }
     }
 }

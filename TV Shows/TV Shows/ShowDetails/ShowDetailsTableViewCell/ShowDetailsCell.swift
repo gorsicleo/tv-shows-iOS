@@ -23,7 +23,7 @@ final class ShowDetailsCell: UITableViewCell {
     // MARK: - Nib lifecycle -
 
     override func layoutSubviews() {
-        // I intentionally did not call the method super.layoutSubviews because it will draw separator line
+        super.layoutSubviews()
         showImage.layer.cornerRadius = 12
     }
 }

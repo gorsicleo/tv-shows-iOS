@@ -64,30 +64,23 @@ private extension ShowDetailsViewController {
 
 // MARK: - Table View delegates -
 
-extension ShowDetailsViewController: UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-    }
-}
-
 extension ShowDetailsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return reviews.count
+        return reviews.count + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let show = show else { return UITableViewCell()}
 
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ShowDetailsCell", for: indexPath) as! ShowDetailsCell
-            if let show = show {
-                cell.setUpCellUI(for: show)
-            }
+            cell.setUpCellUI(for: show)
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath) as! ReviewCell
-            cell.setUpCellUI(for: reviews[indexPath.row])
+            cell.setUpCellUI(for: reviews[indexPath.row - 1])
             return cell
         }
     }
@@ -100,7 +93,6 @@ private extension ShowDetailsViewController {
     func setUpTableView() {
         registerCells()
         disableSelection()
-        tableView.delegate = self
         tableView.dataSource = self
     }
 
@@ -127,8 +119,7 @@ private extension ShowDetailsViewController {
 
         writeReviewController.completionHandler = { [weak self] review in
             guard let self = self else { return }
-            self.reviews.append(review)
-            self.tableView.reloadData()
+            self.reviews.insert(review, at: 0)
         }
 
         let navigationController = UINavigationController(rootViewController: writeReviewController)
