@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bi6-bT-OdR">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="bi6-bT-OdR">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zkA-fc-Wy2" userLabel="Content View">
@@ -99,6 +99,7 @@
                     <connections>
                         <outlet property="ratingView" destination="yzK-MK-flp" id="cT7-9O-aSn"/>
                         <outlet property="reviewTextView" destination="xdb-Hp-FLe" id="8Iv-qV-JcW"/>
+                        <outlet property="scrollView" destination="bi6-bT-OdR" id="yAY-s9-rA4"/>
                         <outlet property="submitButton" destination="yLh-GZ-D8p" id="eMt-kg-RYg"/>
                     </connections>
                 </viewController>

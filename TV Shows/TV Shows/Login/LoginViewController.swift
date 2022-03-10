@@ -22,19 +22,24 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var passwordVisibilityButton: UIButton!
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    private var notificationTokens: [NSObjectProtocol] = []
 
-    
     // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
-        addGestureRecognier()
+        handleKeyboard()
         
         #if DEBUG
         emailTextField.text = "marko.cupic@fer.hr"
         passwordTextField.text = "supermarko"
         #endif
+    }
+
+    deinit {
+        notificationTokens.forEach(NotificationCenter.default.removeObserver)
     }
     
     override func viewDidLayoutSubviews() {
@@ -127,16 +132,37 @@ private extension LoginViewController {
 
         loginButton.isEnabled = emailFieldInput.count > 0 && passwordFieldInput.count > 0 ? true : false
     }
-    
-    func addGestureRecognier() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
+
+    func handleKeyboard() {
+        let showToken = createKeyboardWillShowToken()
+        notificationTokens.append(showToken)
+
+        let hideToken = createKeyboardWillHideToken()
+        notificationTokens.append(hideToken)
     }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+
+    func createKeyboardWillShowToken() -> NSObjectProtocol {
+        return NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillShowNotification,
+            object: nil,
+            queue: nil) { [unowned self] notification in
+                guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+                let height = value.cgRectValue.size.height
+                scrollView.contentInset.bottom = height
+                scrollView.scrollIndicatorInsets.bottom = height
+        }
     }
-    
+
+    func createKeyboardWillHideToken() -> NSObjectProtocol{
+        return NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillHideNotification,
+            object: nil,
+            queue: nil) { [unowned self] notification in
+                scrollView.contentInset.bottom = 0
+                scrollView.scrollIndicatorInsets.bottom = 0
+            }
+    }
+
     func setUpCornerRadius() {
         loginButton.layer.cornerRadius = Constants.Buttons.buttonCornerRadius
     }

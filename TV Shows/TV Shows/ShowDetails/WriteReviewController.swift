@@ -16,6 +16,8 @@ final class WriteReviewController: UIViewController {
     @IBOutlet private weak var ratingView: RatingView!
     @IBOutlet private weak var submitButton: CustomButton!
     @IBOutlet private weak var reviewTextView: UITextView!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    private var notificationTokens: [NSObjectProtocol] = []
 
     // MARK: - public properties -
 
@@ -26,8 +28,12 @@ final class WriteReviewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        addGestureRecognier()
+        handleKeyboard()
         setUpUI()
+    }
+
+    deinit {
+        notificationTokens.forEach(NotificationCenter.default.removeObserver)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +51,36 @@ final class WriteReviewController: UIViewController {
 // MARK: - Setup UI -
 
 private extension WriteReviewController {
+
+    func handleKeyboard() {
+        let showToken = createKeyboardWillShowToken()
+        notificationTokens.append(showToken)
+
+        let hideToken = createKeyboardWillHideToken()
+        notificationTokens.append(hideToken)
+    }
+
+    func createKeyboardWillShowToken() -> NSObjectProtocol {
+        return NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillShowNotification,
+            object: nil,
+            queue: nil) { [unowned self] notification in
+                guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+                let height = value.cgRectValue.size.height
+                scrollView.contentInset.bottom = height
+                scrollView.scrollIndicatorInsets.bottom = height
+        }
+    }
+
+    func createKeyboardWillHideToken() -> NSObjectProtocol{
+        return NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillHideNotification,
+            object: nil,
+            queue: nil) { [unowned self] notification in
+                scrollView.contentInset.bottom = 0
+                scrollView.scrollIndicatorInsets.bottom = 0
+            }
+    }
 
     func setUpNavigationBar() {
         title = "Write a Review"
@@ -112,15 +148,6 @@ extension WriteReviewController: UITextViewDelegate {
         if textView.text.isEmpty {
             setUpPlaceholderText()
         }
-    }
-
-    func addGestureRecognier() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
     }
 }
 

@@ -285,6 +285,7 @@
                         <outlet property="passwordVisibilityButton" destination="F4J-Ob-Prz" id="Oyh-7L-wd4"/>
                         <outlet property="registerButton" destination="iQX-Ym-9zV" id="1WP-ny-fzS"/>
                         <outlet property="rememberMeButton" destination="eYj-IE-dQ7" id="Yha-E9-dWm"/>
+                        <outlet property="scrollView" destination="Can-h5-VBU" id="evt-R9-qDO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ydh-fE-2rH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
