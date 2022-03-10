@@ -297,6 +297,9 @@ private extension LoginViewController {
         }
         APIManager.shared.authInfo = authInfo
         SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.loginSuccesful)
+        if rememberMeButton.isSelected {
+            AuthInfoPersistance.saveCredentials()
+        }
         navigate(to: .home)
     }
     
@@ -314,7 +317,6 @@ private extension LoginViewController {
         for error in errors {
             SVProgressHUD.showError(withStatus: error)
         }
-
     }
 }
 
