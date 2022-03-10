@@ -281,6 +281,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="iI5-WB-gJ4" id="6Qp-wy-wEb"/>
                         <outlet property="loginButton" destination="j4G-Sc-o99" id="oL9-ru-ddo"/>
+                        <outlet property="logoView" destination="xSK-aK-881" id="r8M-NP-Eb3"/>
                         <outlet property="passwordTextField" destination="k2w-FM-1tz" id="zC9-OF-XbY"/>
                         <outlet property="passwordVisibilityButton" destination="F4J-Ob-Prz" id="Oyh-7L-wd4"/>
                         <outlet property="registerButton" destination="iQX-Ym-9zV" id="1WP-ny-fzS"/>
