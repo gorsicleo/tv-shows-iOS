@@ -69,14 +69,18 @@ private extension ShowsViewController {
     }
 
     func createRightNavigationButton() -> UIBarButtonItem {
-            let rightNavigationButton = UIBarButtonItem(
-                title: "",
-                style: .plain,
-                target: self,
-                action: #selector(userButtonClicked(sender:))
-                )
-            rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
-            return rightNavigationButton
+        let rightNavigationButton = UIButton(type: .custom)
+        rightNavigationButton.frame = CGRect(x: 0.0, y: 0.0, width: 20, height: 20)
+        rightNavigationButton.setImage(UIImage(named:"userIcon"), for: .normal)
+        rightNavigationButton.addTarget(self, action: #selector(userButtonClicked(sender:)), for: UIControl.Event.touchUpInside)
+
+            let rightNavigationButtonItem = UIBarButtonItem(customView: rightNavigationButton)
+            let currWidth = rightNavigationButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24)
+            currWidth?.isActive = true
+            let currHeight = rightNavigationButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24)
+            currHeight?.isActive = true
+
+        return rightNavigationButtonItem
     }
 
 
@@ -123,7 +127,6 @@ private extension ShowsViewController {
     func hideBackButton() {
         navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.setViewControllers([self], animated: true)
-        navigationController?.navigationBar.barTintColor = .red
     }
     
     func addRightNavigationButton() {
