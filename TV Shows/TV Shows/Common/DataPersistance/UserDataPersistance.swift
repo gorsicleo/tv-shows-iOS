@@ -24,4 +24,9 @@ final class UserDataPersistance {
             }
         return nil
     }
+
+    static func removeUserData() {
+        guard let _ = UserDefaults.standard.data(forKey: savingKey) else { return }
+        UserDefaults.standard.removeObject(forKey: savingKey)
+    }
 }

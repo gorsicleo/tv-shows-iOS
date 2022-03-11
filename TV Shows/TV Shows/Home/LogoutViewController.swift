@@ -86,5 +86,9 @@ private extension LogoutViewController {
 
     @IBAction func logoutAction(_ sender: Any) {
         AuthInfoPersistance.removeCredentials()
+        UserDataPersistance.removeUserData()
+        let storyboard = UIStoryboard(name: "Login", bundle: .main)
+        let mainView = storyboard.instantiateViewController(withIdentifier: "Login")
+        self.navigationController?.setViewControllers([mainView], animated: true)
     }
 }
