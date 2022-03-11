@@ -69,9 +69,28 @@ private extension ShowsViewController {
     }
 
     func createRightNavigationButton() -> UIBarButtonItem {
-            let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+            let rightNavigationButton = UIBarButtonItem(
+                title: "",
+                style: .plain,
+                target: self,
+                action: #selector(userButtonClicked(sender:))
+                )
             rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
             return rightNavigationButton
+    }
+
+
+    @objc func userButtonClicked(sender: UIButton){
+        let logoutViewController = instantiateLogoutViewController()
+        logoutViewController.user = UserDataPersistance.loadUserData()
+
+        let navigationController = UINavigationController(rootViewController: logoutViewController)
+        present(navigationController, animated: true)
+    }
+
+    func instantiateLogoutViewController() -> LogoutViewController {
+        let storyboard = UIStoryboard(name: "Logout", bundle: .main)
+        return storyboard.instantiateViewController(withIdentifier: "LogoutViewController") as! LogoutViewController
     }
 }
 

@@ -19,7 +19,7 @@ protocol APIManagerInterface {
 }
 
 /// ` APIManager` represens singleton instance for managing API requests. 
-final class APIManager {
+final class APIManager: APIManagerInterface {
     
     static let shared = APIManager(session: Session())
     private let session: Session

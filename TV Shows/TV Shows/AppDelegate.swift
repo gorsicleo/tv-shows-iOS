@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if authInfo != nil {
             APIManager.shared.authInfo = authInfo
             let storyboard = UIStoryboard(name: "Home", bundle: .main)
-            let mainView = storyboard.instantiateViewController(withIdentifier: "Home")
-            nav1.viewControllers = [mainView]
+            let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+            nav1.viewControllers = [homeViewController]
         } else {
             let storyboard = UIStoryboard(name: "Login", bundle: .main)
             let mainView = storyboard.instantiateViewController(withIdentifier: "Login")

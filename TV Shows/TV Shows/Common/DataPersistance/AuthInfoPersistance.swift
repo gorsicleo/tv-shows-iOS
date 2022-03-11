@@ -30,4 +30,8 @@ final class AuthInfoPersistance {
         let data = try? propertyListDecoder.decode(AuthInfo.self, from: retrievedData)
         return data
     }
+
+    static func removeCredentials() {
+        keychain["encodedAuthInfo"] = nil
+    }
 }
