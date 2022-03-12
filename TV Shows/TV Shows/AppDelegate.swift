@@ -16,13 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
         let authInfo = AuthInfoPersistance.loadCredentials()
+        let isBiometricsRequired = BiometricAuthInfoPersistance.getBiometricLoginFlag()
         let nav1 = UINavigationController()
 
         if authInfo != nil {
-            APIManager.shared.authInfo = authInfo
-            let storyboard = UIStoryboard(name: "Home", bundle: .main)
-            let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-            nav1.viewControllers = [homeViewController]
+            if isBiometricsRequired {
+                BiometricAuthInfoPersistance.loadCredentials()
+                let storyboard = UIStoryboard(name: "Login", bundle: .main)
+                let mainView = storyboard.instantiateViewController(withIdentifier: "Login")
+                nav1.viewControllers = [mainView]
+            } else {
+                APIManager.shared.authInfo = authInfo
+                let storyboard = UIStoryboard(name: "Home", bundle: .main)
+                let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+                nav1.viewControllers = [homeViewController]
+            }
         } else {
             let storyboard = UIStoryboard(name: "Login", bundle: .main)
             let mainView = storyboard.instantiateViewController(withIdentifier: "Login")

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="ZeA-Mk-vBG">
-                                <rect key="frame" x="24" y="68" width="366" height="232"/>
+                                <rect key="frame" x="24" y="68" width="366" height="288"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ios.team@infinum.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LXa-kc-mmk">
                                         <rect key="frame" x="0.0" y="0.0" width="366" height="26"/>
@@ -45,11 +45,31 @@
                                                 <buttonConfiguration key="configuration" style="plain" title="Change Profile Photo">
                                                     <color key="baseForegroundColor" red="0.50196078430000002" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="changeProfilePictureAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="vYJ-7m-LnV"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="cQd-tP-fDt">
+                                        <rect key="frame" x="0.0" y="176" width="366" height="31"/>
+                                        <subviews>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="432-6i-uHM">
+                                                <rect key="frame" x="0.0" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="biometricSwitch:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="R7g-Sh-gO2"/>
+                                                </connections>
+                                            </switch>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Require biometric on remember me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FTS-7M-g2t">
+                                                <rect key="frame" x="69" y="0.0" width="297" height="31"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="0.50196078430000002" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zjv-MJ-ucA" customClass="CustomButton" customModule="TV_Shows" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="176" width="366" height="56"/>
+                                        <rect key="frame" x="0.0" y="232" width="366" height="56"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="56" id="sus-bk-64u"/>
                                         </constraints>
@@ -73,6 +93,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="biometricsSwitch" destination="432-6i-uHM" id="zkI-l8-NTM"/>
                         <outlet property="changePhotoButton" destination="CHz-vt-zeg" id="uG5-ff-jvE"/>
                         <outlet property="emailLabel" destination="LXa-kc-mmk" id="8A9-yp-gEM"/>
                         <outlet property="imageView" destination="ha3-jl-8jB" id="QuD-QJ-Qpd"/>
