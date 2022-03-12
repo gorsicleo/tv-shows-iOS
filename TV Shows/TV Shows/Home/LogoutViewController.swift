@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import SVProgressHUD
+import Alamofire
 
 final class LogoutViewController: UIViewController {
 
@@ -86,6 +88,34 @@ private extension LogoutViewController {
 
 }
 
+private extension LogoutViewController {
+
+    func uploadProfilePicture(data: MultipartFormData) {
+        SVProgressHUD.show()
+        APIManager.shared.call(
+            router: Router.updateProfile(data: data),
+            responseType: UserResponse.self
+        ) { [weak self] response in
+            SVProgressHUD.dismiss()
+            guard let self = self else { return }
+            switch response.result {
+            case .success(let response):
+                guard let imageUrl = response.user.imageUrl, let imageUrl = URL(string: imageUrl) else { return }
+                self.imageView.loadImageFromNetwork(url: imageUrl)
+            case .failure:
+                self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.networkError)
+            }
+        }
+    }
+
+    func handleFailedResponse(_ data: Data?, defaultValue: String) {
+        let errors = ErrorDecoder.decode(from: data, defaultValue: defaultValue)
+        for error in errors {
+            SVProgressHUD.showError(withStatus: error)
+        }
+    }
+}
+
 // MARK: - IBAction -
 
 private extension LogoutViewController {
@@ -106,7 +136,6 @@ private extension LogoutViewController {
     @IBAction func changeProfilePictureAction(_ sender: Any) {
         showImagePickerControllerActionSheet()
     }
-
 }
 
 extension LogoutViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -134,9 +163,11 @@ extension LogoutViewController: UIImagePickerControllerDelegate, UINavigationCon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
         if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
-            imageView.image = editedImage
+            guard let data = APIManager.createMultipartDataFromImage(image: editedImage) else { return }
+            uploadProfilePicture(data: data)
         } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            imageView.image = originalImage
+            guard let data = APIManager.createMultipartDataFromImage(image: originalImage) else { return }
+            uploadProfilePicture(data: data)
         }
 
         dismiss(animated: true, completion: nil)
