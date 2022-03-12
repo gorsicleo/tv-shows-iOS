@@ -64,7 +64,7 @@ final class APIManager: APIManagerInterface {
     }
 
     static func createMultipartDataFromImage(image: UIImage) -> MultipartFormData? {
-        guard let imageData = image.jpegData(compressionQuality: 0.9) else { return nil}
+        guard let imageData = image.jpegData(compressionQuality: 1) else { return nil}
         let multipartFormData = MultipartFormData()
         multipartFormData.append(
                     imageData,

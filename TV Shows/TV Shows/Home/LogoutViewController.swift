@@ -32,7 +32,7 @@ private extension LogoutViewController {
     func setUpUI(for user: User) {
         setUpEmailLabel(email: user.email)
         setUpImageView(imageUrl: user.imageUrl)
-        setUpButtons()
+        setUpLogoutButton()
         setUpBiometricsSwitch()
 
     }
@@ -45,15 +45,6 @@ private extension LogoutViewController {
         guard let imageUrl = imageUrl else { return }
         imageView.loadImageFromNetwork(url: URL(string: imageUrl)!)
         imageView.makeRounded()
-    }
-
-    func setUpButtons() {
-        setUpChangePhotoButton()
-        setUpLogoutButton()
-    }
-
-    func setUpChangePhotoButton() {
-
     }
 
     func setUpBiometricsSwitch() {
@@ -137,6 +128,8 @@ private extension LogoutViewController {
         showImagePickerControllerActionSheet()
     }
 }
+
+// MARK: - UIImagePickerDelegates -
 
 extension LogoutViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
