@@ -12,6 +12,8 @@ import Alamofire
 
 final class LogoutViewController: UIViewController {
 
+// MARK: - Private properties -
+    
     @IBOutlet private weak var emailLabel: UILabel!
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var changePhotoButton: UIButton!
@@ -26,6 +28,8 @@ final class LogoutViewController: UIViewController {
         setUpNavigationBar()
     }
 }
+
+// MARK: - Setup UI -
 
 private extension LogoutViewController {
 
@@ -79,6 +83,8 @@ private extension LogoutViewController {
 
 }
 
+// MARK: - API Call -
+
 private extension LogoutViewController {
 
     func uploadProfilePicture(data: MultipartFormData) {
@@ -114,9 +120,10 @@ private extension LogoutViewController {
     @IBAction func logoutAction(_ sender: Any) {
         AuthInfoPersistance.removeCredentials()
         UserDataPersistance.removeUserData()
+        if BiometricAuthInfoPersistance.getBiometricLoginFlag() { BiometricAuthInfoPersistance.removeCredentials() }
         let storyboard = UIStoryboard(name: "Login", bundle: .main)
         let mainView = storyboard.instantiateViewController(withIdentifier: "Login")
-        self.navigationController?.setViewControllers([mainView], animated: true)
+        navigationController?.setViewControllers([mainView], animated: true)
     }
 
     @IBAction func biometricSwitch(_ sender: Any) {

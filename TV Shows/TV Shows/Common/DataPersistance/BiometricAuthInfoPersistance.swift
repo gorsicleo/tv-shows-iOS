@@ -8,10 +8,15 @@
 import Foundation
 import KeychainAccess
 import FileProvider
+import RxSwift
+import RxCocoa
 
 final class BiometricAuthInfoPersistance {
 
     static let savingKey = "RequireBiometrics"
+    static let propertyListEncoder = PropertyListEncoder()
+    static let propertyListDecoder = PropertyListDecoder()
+    static let keychain = Keychain(service: "com.TV-shows.AuthInfo")
 
     static func setBiometricLoginFlag(to value: Bool) {
         UserDefaults.standard.set(value, forKey: savingKey)
@@ -25,10 +30,6 @@ final class BiometricAuthInfoPersistance {
     static func getBiometricLoginFlag() -> Bool {
         return UserDefaults.standard.bool(forKey: savingKey)
     }
-
-    static let propertyListEncoder = PropertyListEncoder()
-    static let propertyListDecoder = PropertyListDecoder()
-    static let keychain = Keychain(service: "com.TV-shows.AuthInfo")
 
     static func saveCredentials() {
 
@@ -45,7 +46,8 @@ final class BiometricAuthInfoPersistance {
         }
     }
 
-    static func loadCredentials() {
+    static func loadCredentials(_ publishSubject: PublishSubject<Void>) {
+        if !BiometricAuthInfoPersistance.getBiometricLoginFlag() { return }
         DispatchQueue.global().async {
             do {
                 let retrievedData = try keychain
@@ -54,7 +56,7 @@ final class BiometricAuthInfoPersistance {
 
                 guard let retrievedData = retrievedData else { return }
                 APIManager.shared.authInfo = try? propertyListDecoder.decode(AuthInfo.self, from: retrievedData)
-                
+                publishSubject.onNext(())
             } catch {}
         }
     }
@@ -64,5 +66,4 @@ final class BiometricAuthInfoPersistance {
             try keychain.remove(savingKey)
         } catch {}
     }
-
 }

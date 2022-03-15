@@ -7,6 +7,8 @@
 import UIKit
 import Alamofire
 import SVProgressHUD
+import RxSwift
+import RxCocoa
 
 enum LoginNavigationOption {
     case home
@@ -25,7 +27,9 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var scrollView: UIScrollView!
     @IBOutlet weak var logoView: UIImageView!
     private var notificationTokens: [NSObjectProtocol] = []
-
+    private let disposeBag = DisposeBag()
+    let publishSubject = PublishSubject<Void>()
+    
     // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
@@ -33,7 +37,8 @@ final class LoginViewController: UIViewController {
         setUpUI()
         handleKeyboard()
         animateOnStartup()
-        
+        subscribeToBiometrics()
+
         #if DEBUG
         emailTextField.text = "marko.cupic@fer.hr"
         passwordTextField.text = "supermarko"
@@ -64,6 +69,17 @@ final class LoginViewController: UIViewController {
 // MARK: - Extensions -
 
 private extension LoginViewController {
+
+    func subscribeToBiometrics() {
+        publishSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] _ in
+                navigate(to: .home)
+            })
+            .disposed(by: disposeBag)
+
+        BiometricAuthInfoPersistance.loadCredentials(publishSubject)
+    }
     
     // MARK: - Setup UI -
     

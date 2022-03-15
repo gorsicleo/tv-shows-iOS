@@ -7,6 +7,11 @@
 
 import UIKit
 
+enum OnBootNavigationOption {
+    case home
+    case login
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,28 +22,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let authInfo = AuthInfoPersistance.loadCredentials()
         let isBiometricsRequired = BiometricAuthInfoPersistance.getBiometricLoginFlag()
-        let nav1 = UINavigationController()
+
 
         if authInfo != nil {
             if isBiometricsRequired {
-                BiometricAuthInfoPersistance.loadCredentials()
-                let storyboard = UIStoryboard(name: "Login", bundle: .main)
-                let mainView = storyboard.instantiateViewController(withIdentifier: "Login")
-                nav1.viewControllers = [mainView]
+                navigate(to: .login)
             } else {
                 APIManager.shared.authInfo = authInfo
-                let storyboard = UIStoryboard(name: "Home", bundle: .main)
-                let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-                nav1.viewControllers = [homeViewController]
+                navigate(to: .home)
             }
         } else {
-            let storyboard = UIStoryboard(name: "Login", bundle: .main)
-            let mainView = storyboard.instantiateViewController(withIdentifier: "Login")
-            nav1.viewControllers = [mainView]
+            navigate(to: .login)
         }
 
-        self.window!.rootViewController = nav1
         self.window?.makeKeyAndVisible()
         return true
+    }
+}
+
+private extension AppDelegate {
+
+    func navigate(to navigationOption: OnBootNavigationOption) {
+        let nav1 = UINavigationController()
+
+        switch navigationOption {
+        case .login:
+            let storyboard = UIStoryboard(name: "Login", bundle: .main)
+            let mainView = storyboard.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+            nav1.viewControllers = [mainView]
+            self.window!.rootViewController = nav1
+
+        case .home:
+            let storyboard = UIStoryboard(name: "Home", bundle: .main)
+            let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+            nav1.viewControllers = [homeViewController]
+            self.window!.rootViewController = nav1
+        }
     }
 }
