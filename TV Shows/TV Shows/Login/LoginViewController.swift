@@ -5,6 +5,14 @@
 //  Created by Leo Goršić on 02.02.2022..
 
 import UIKit
+import Alamofire
+import SVProgressHUD
+import RxSwift
+import RxCocoa
+
+enum LoginNavigationOption {
+    case home
+}
 
 final class LoginViewController: UIViewController {
     
@@ -16,31 +24,64 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var passwordVisibilityButton: UIButton!
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
+    @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var logoView: UIImageView!
+    private var notificationTokens: [NSObjectProtocol] = []
+    private let disposeBag = DisposeBag()
+    let publishSubject = PublishSubject<Void>()
     
     // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
-        addGestureRecognier()
-        
+        handleKeyboard()
+        animateOnStartup()
+        subscribeToBiometrics()
+
         #if DEBUG
         emailTextField.text = "marko.cupic@fer.hr"
         passwordTextField.text = "supermarko"
         #endif
+    }
+
+    deinit {
+        notificationTokens.forEach(NotificationCenter.default.removeObserver)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setUpCornerRadius()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+
 }
 
 // MARK: - Extensions -
 
-// MARK: - Setup UI -
-
 private extension LoginViewController {
+
+    func subscribeToBiometrics() {
+        publishSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] _ in
+                navigate(to: .home)
+            })
+            .disposed(by: disposeBag)
+
+        BiometricAuthInfoPersistance.loadCredentials(publishSubject)
+    }
+    
+    // MARK: - Setup UI -
     
     func setUpUI() {
         setUpTextFields()
@@ -109,18 +150,74 @@ private extension LoginViewController {
 
         loginButton.isEnabled = emailFieldInput.count > 0 && passwordFieldInput.count > 0 ? true : false
     }
-    
-    func addGestureRecognier() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
+
+    // MARK: - Keyboard handling -
+
+    func handleKeyboard() {
+        let showToken = createKeyboardWillShowToken()
+        notificationTokens.append(showToken)
+
+        let hideToken = createKeyboardWillHideToken()
+        notificationTokens.append(hideToken)
     }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+
+    func createKeyboardWillShowToken() -> NSObjectProtocol {
+        return NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillShowNotification,
+            object: nil,
+            queue: nil) { [unowned self] notification in
+                guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+                let height = value.cgRectValue.size.height
+                scrollView.contentInset.bottom = height
+                scrollView.scrollIndicatorInsets.bottom = height
+        }
     }
-    
+
+    func createKeyboardWillHideToken() -> NSObjectProtocol{
+        return NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillHideNotification,
+            object: nil,
+            queue: nil) { [unowned self] notification in
+                scrollView.contentInset.bottom = 0
+                scrollView.scrollIndicatorInsets.bottom = 0
+            }
+    }
+
     func setUpCornerRadius() {
         loginButton.layer.cornerRadius = Constants.Buttons.buttonCornerRadius
+    }
+
+    // MARK: - Animations -
+
+    func animateOnStartup() {
+        loginButton.alpha = 0
+        registerButton.alpha = 0
+
+        loginButton.transform = CGAffineTransform(translationX: 0, y: 100)
+        registerButton.transform = CGAffineTransform(translationX: 0, y: 100)
+
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            options: []
+        ) { [unowned self] in
+            loginButton.alpha = 1
+            registerButton.alpha = 1
+
+            loginButton.transform = CGAffineTransform.identity
+            registerButton.transform = CGAffineTransform.identity
+        }
+    }
+
+    func animateFailedResponse() {
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.07
+        animation.repeatCount = 4
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: logoView.center.x - 10, y: logoView.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: logoView.center.x + 10, y: logoView.center.y))
+
+        logoView.layer.add(animation, forKey: "position")
     }
 }
 
@@ -143,5 +240,113 @@ private extension LoginViewController {
     
     @IBAction func passwordFieldValueChangeAction() {
         checkInputValidity()
+    }
+    
+    @IBAction func loginButtonAction(_ sender: Any) {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        sendApiCallLogin(router: Router.login(email: email, password: password))
+    }
+    
+    @IBAction func registerButtonAction(_ sender: Any) {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        sendApiCallRegister(router: Router.register(email: email, password: password))
+    }
+    
+}
+
+// MARK: - API Call -
+
+private extension LoginViewController {
+    
+    func sendApiCallLogin(router: Router) {
+        SVProgressHUD.show()
+        APIManager
+            .shared
+            .call(router: router,responseType: UserResponse.self) { [weak self] response in
+                SVProgressHUD.dismiss()
+                guard let self = self else { return }
+                
+                switch response.result {
+                case .success(let payload) :
+                    guard let headers = response.response?.headers.dictionary else { return }
+                    self.handleSuccesfulLogin(for: payload.user,headers: headers)
+                    break;
+                case .failure :
+                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.networkError)
+                    break
+                }
+        }
+    }
+    
+    func sendApiCallRegister(router: Router) {
+        SVProgressHUD.show()
+        APIManager
+            .shared
+            .call(router: router,responseType: UserResponse.self) { [weak self] response in
+                SVProgressHUD.dismiss()
+                guard let self = self else { return }
+            
+                switch response.result {
+                case .success(let payload) :
+                    guard let headers = response.response?.headers.dictionary else { return }
+                    self.handleSuccesfulRegister(for: payload.user,headers: headers)
+                    break;
+                case .failure:
+                    self.handleFailedResponse(response.data, defaultValue: Constants.AlertMessages.networkError)
+                    break
+                }
+        }
+    }
+
+}
+    
+    // MARK: - API Response Handlers -
+
+private extension LoginViewController {
+    
+    func handleSuccesfulLogin(for user: User, headers: [String: String]) {
+        guard let authInfo = try? AuthInfo(headers: headers) else {
+            SVProgressHUD.showError(withStatus: Constants.AlertMessages.missingHeaders)
+            return
+        }
+        APIManager.shared.authInfo = authInfo
+        UserDataPersistance.saveUserData(for: user)
+        if rememberMeButton.isSelected {
+            AuthInfoPersistance.saveCredentials()
+        }
+        SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.loginSuccesful)
+        navigate(to: .home)
+    }
+    
+    func handleSuccesfulRegister(for user: User, headers: [String: String]) {
+        guard let _ = try? AuthInfo(headers: headers) else {
+            SVProgressHUD.showError(withStatus: Constants.AlertMessages.missingHeaders)
+            return
+        }
+        SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.resgisterSuccesful)
+    }
+    
+    func handleFailedResponse(_ data: Data?, defaultValue: String) {
+        animateFailedResponse()
+        let errors = ErrorDecoder.decode(from: data, defaultValue: defaultValue)
+        for error in errors {
+            SVProgressHUD.showError(withStatus: error)
+        }
+    }
+}
+
+// MARK: - Navigation -
+
+extension LoginViewController {
+    
+    func navigate(to navigationOption: LoginNavigationOption) {
+        switch navigationOption {
+        case .home:
+            let storyboard = UIStoryboard(name: "Home", bundle: .main)
+            let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
+            navigationController?.pushViewController(homeViewController, animated: true)
+        }
     }
 }
