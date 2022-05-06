@@ -71,7 +71,7 @@ final class APIManager: APIManagerInterface {
                     withName: "image",
                     fileName: "image.jpg",
                     mimeType: "image/jpg"
-                )
+        )
         return multipartFormData
     }
 }

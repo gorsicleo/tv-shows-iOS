@@ -25,7 +25,7 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
     @IBOutlet private weak var scrollView: UIScrollView!
-    @IBOutlet weak var logoView: UIImageView!
+    @IBOutlet private weak var logoView: UIImageView!
     private var notificationTokens: [NSObjectProtocol] = []
     private let disposeBag = DisposeBag()
     let publishSubject = PublishSubject<Void>()

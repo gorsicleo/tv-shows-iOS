@@ -12,13 +12,16 @@ import Alamofire
 
 final class LogoutViewController: UIViewController {
 
-// MARK: - Private properties -
+    // MARK: - Private properties -
     
     @IBOutlet private weak var emailLabel: UILabel!
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var changePhotoButton: UIButton!
     @IBOutlet private weak var logoutButton: CustomButton!
     @IBOutlet private weak var biometricsSwitch: UISwitch!
+
+    // MARK: - Public properties -
+
     var user: User?
 
     override func viewDidLoad() {
@@ -38,7 +41,6 @@ private extension LogoutViewController {
         setUpImageView(imageUrl: user.imageUrl)
         setUpLogoutButton()
         setUpBiometricsSwitch()
-
     }
 
     func setUpEmailLabel(email: String) {
@@ -66,7 +68,6 @@ private extension LogoutViewController {
     }
 
     func addLeftNavigationButton() {
-
         let leftNavigationButton = UIBarButtonItem(
             title: "Close",
             style: .plain,
@@ -107,8 +108,8 @@ private extension LogoutViewController {
 
     func handleFailedResponse(_ data: Data?, defaultValue: String) {
         let errors = ErrorDecoder.decode(from: data, defaultValue: defaultValue)
-        for error in errors {
-            SVProgressHUD.showError(withStatus: error)
+        errors.forEach {
+            SVProgressHUD.showError(withStatus: $0)
         }
     }
 }
@@ -126,12 +127,12 @@ private extension LogoutViewController {
         navigationController?.setViewControllers([mainView], animated: true)
     }
 
-    @IBAction func biometricSwitch(_ sender: Any) {
+    @IBAction func biometricSwitch() {
         print(biometricsSwitch.isOn)
         BiometricAuthInfoPersistance.setBiometricLoginFlag(to: biometricsSwitch.isOn)
     }
 
-    @IBAction func changeProfilePictureAction(_ sender: Any) {
+    @IBAction func changeProfilePictureAction() {
         showImagePickerControllerActionSheet()
     }
 }

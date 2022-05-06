@@ -23,16 +23,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let authInfo = AuthInfoPersistance.loadCredentials()
         let isBiometricsRequired = BiometricAuthInfoPersistance.getBiometricLoginFlag()
 
-
-        if authInfo != nil {
-            if isBiometricsRequired {
-                navigate(to: .login)
-            } else {
-                APIManager.shared.authInfo = authInfo
-                navigate(to: .home)
-            }
-        } else {
+        guard authInfo != nil else { navigate(to: .login); return true}
+        if isBiometricsRequired {
             navigate(to: .login)
+        } else {
+            APIManager.shared.authInfo = authInfo
+            navigate(to: .home)
         }
 
         window?.makeKeyAndVisible()
@@ -43,20 +39,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 private extension AppDelegate {
 
     func navigate(to navigationOption: OnBootNavigationOption) {
-        let nav1 = UINavigationController()
+        let baseNavigationController = UINavigationController()
 
         switch navigationOption {
         case .login:
             let storyboard = UIStoryboard(name: "Login", bundle: .main)
-            let mainView = storyboard.instantiateViewController(withIdentifier: "Login") as! LoginViewController
-            nav1.viewControllers = [mainView]
-            window!.rootViewController = nav1
+            let loginViewController = storyboard.instantiateViewController(withIdentifier: "Login") as! LoginViewController
+            baseNavigationController.viewControllers = [loginViewController]
+            window!.rootViewController = baseNavigationController
 
         case .home:
             let storyboard = UIStoryboard(name: "Home", bundle: .main)
             let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
-            nav1.viewControllers = [homeViewController]
-            window!.rootViewController = nav1
+            baseNavigationController.viewControllers = [homeViewController]
+            window!.rootViewController = baseNavigationController
         }
     }
 }

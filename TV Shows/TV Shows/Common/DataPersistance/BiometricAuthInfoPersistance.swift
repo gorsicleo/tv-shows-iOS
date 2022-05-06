@@ -39,10 +39,10 @@ final class BiometricAuthInfoPersistance {
             let data = try? propertyListEncoder.encode(authInfo)
             guard let savingData = data else { return }
             do {
-                try keychain
+                try? keychain
                     .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: .userPresence)
                     .set(NSData(data: savingData) as Data, key: savingKey)
-            } catch {}
+            }
         }
     }
 
@@ -50,20 +50,20 @@ final class BiometricAuthInfoPersistance {
         if !BiometricAuthInfoPersistance.getBiometricLoginFlag() { return }
         DispatchQueue.global().async {
             do {
-                let retrievedData = try keychain
+                let retrievedData = try? keychain
                     .authenticationPrompt("Authenticate to login")
                     .getData(savingKey)
 
                 guard let retrievedData = retrievedData else { return }
                 APIManager.shared.authInfo = try? propertyListDecoder.decode(AuthInfo.self, from: retrievedData)
                 publishSubject.onNext(())
-            } catch {}
+            }
         }
     }
 
     static func removeCredentials() {
         do {
-            try keychain.remove(savingKey)
-        } catch {}
+            try? keychain.remove(savingKey)
+        }
     }
 }

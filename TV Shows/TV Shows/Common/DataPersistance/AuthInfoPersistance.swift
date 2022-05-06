@@ -19,10 +19,8 @@ final class AuthInfoPersistance {
         let authInfo = APIManager.shared.authInfo
 
         let data = try? propertyListEncoder.encode(authInfo)
-        if let savingData = data {
-            keychain[data: "encodedAuthInfo"] = NSData(data: savingData) as Data
-        }
-
+        guard let savingData = data else { return }
+        keychain[data: "encodedAuthInfo"] = NSData(data: savingData) as Data
     }
 
     static func loadCredentials() -> AuthInfo? {
