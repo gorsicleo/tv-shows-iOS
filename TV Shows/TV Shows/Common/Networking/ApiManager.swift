@@ -19,7 +19,7 @@ protocol APIManagerInterface {
 }
 
 /// ` APIManager` represens singleton instance for managing API requests. 
-final class APIManager {
+final class APIManager: APIManagerInterface {
     
     static let shared = APIManager(session: Session())
     private let session: Session
@@ -43,13 +43,37 @@ final class APIManager {
         responseType: T.Type,
         handler: @escaping (DataResponse<T,AFError>)->()
     ) where T : Decodable {
-        session
-            .request(router)
-            .validate()
-            .responseDecodable(of: T.self) {
-                handler($0)
-            }
+        switch router {
+        case .updateProfile:
+            guard let data = router.data else { return }
+            session
+                .upload(multipartFormData: data, with: router)
+                .validate()
+                .responseDecodable(of: T.self) {
+                    handler($0)
+                }
+        default:
+            session
+                .request(router)
+                .validate()
+                .responseDecodable(of: T.self) {
+                    handler($0)
+                }
         }
+
+    }
+
+    static func createMultipartDataFromImage(image: UIImage) -> MultipartFormData? {
+        guard let imageData = image.jpegData(compressionQuality: 1) else { return nil}
+        let multipartFormData = MultipartFormData()
+        multipartFormData.append(
+                    imageData,
+                    withName: "image",
+                    fileName: "image.jpg",
+                    mimeType: "image/jpg"
+        )
+        return multipartFormData
+    }
 }
 
 final class ErrorDecoder {

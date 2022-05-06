@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -32,7 +32,7 @@
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="splash-top-right" translatesAutoresizingMaskIntoConstraints="NO" id="vWJ-83-Tcf">
                                                         <rect key="frame" x="188" y="0.0" width="202" height="266"/>
                                                     </imageView>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="logo-white" translatesAutoresizingMaskIntoConstraints="NO" id="xSK-aK-881">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" restorationIdentifier="LoginViewController" image="logo-white" translatesAutoresizingMaskIntoConstraints="NO" id="xSK-aK-881">
                                                         <rect key="frame" x="114" y="114" width="162" height="38"/>
                                                     </imageView>
                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Login" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X1e-gl-Ylc">
@@ -281,6 +281,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="iI5-WB-gJ4" id="6Qp-wy-wEb"/>
                         <outlet property="loginButton" destination="j4G-Sc-o99" id="oL9-ru-ddo"/>
+                        <outlet property="logoView" destination="xSK-aK-881" id="r8M-NP-Eb3"/>
                         <outlet property="passwordTextField" destination="k2w-FM-1tz" id="zC9-OF-XbY"/>
                         <outlet property="passwordVisibilityButton" destination="F4J-Ob-Prz" id="Oyh-7L-wd4"/>
                         <outlet property="registerButton" destination="iQX-Ym-9zV" id="1WP-ny-fzS"/>

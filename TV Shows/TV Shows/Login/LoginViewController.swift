@@ -7,6 +7,8 @@
 import UIKit
 import Alamofire
 import SVProgressHUD
+import RxSwift
+import RxCocoa
 
 enum LoginNavigationOption {
     case home
@@ -23,15 +25,20 @@ final class LoginViewController: UIViewController {
     @IBOutlet private weak var loginButton: CustomButton!
     @IBOutlet private weak var registerButton: UIButton!
     @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var logoView: UIImageView!
     private var notificationTokens: [NSObjectProtocol] = []
-
+    private let disposeBag = DisposeBag()
+    let publishSubject = PublishSubject<Void>()
+    
     // MARK: - ViewController Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpUI()
         handleKeyboard()
-        
+        animateOnStartup()
+        subscribeToBiometrics()
+
         #if DEBUG
         emailTextField.text = "marko.cupic@fer.hr"
         passwordTextField.text = "supermarko"
@@ -62,6 +69,17 @@ final class LoginViewController: UIViewController {
 // MARK: - Extensions -
 
 private extension LoginViewController {
+
+    func subscribeToBiometrics() {
+        publishSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [unowned self] _ in
+                navigate(to: .home)
+            })
+            .disposed(by: disposeBag)
+
+        BiometricAuthInfoPersistance.loadCredentials(publishSubject)
+    }
     
     // MARK: - Setup UI -
     
@@ -133,6 +151,8 @@ private extension LoginViewController {
         loginButton.isEnabled = emailFieldInput.count > 0 && passwordFieldInput.count > 0 ? true : false
     }
 
+    // MARK: - Keyboard handling -
+
     func handleKeyboard() {
         let showToken = createKeyboardWillShowToken()
         notificationTokens.append(showToken)
@@ -165,6 +185,39 @@ private extension LoginViewController {
 
     func setUpCornerRadius() {
         loginButton.layer.cornerRadius = Constants.Buttons.buttonCornerRadius
+    }
+
+    // MARK: - Animations -
+
+    func animateOnStartup() {
+        loginButton.alpha = 0
+        registerButton.alpha = 0
+
+        loginButton.transform = CGAffineTransform(translationX: 0, y: 100)
+        registerButton.transform = CGAffineTransform(translationX: 0, y: 100)
+
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            options: []
+        ) { [unowned self] in
+            loginButton.alpha = 1
+            registerButton.alpha = 1
+
+            loginButton.transform = CGAffineTransform.identity
+            registerButton.transform = CGAffineTransform.identity
+        }
+    }
+
+    func animateFailedResponse() {
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.07
+        animation.repeatCount = 4
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: logoView.center.x - 10, y: logoView.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: logoView.center.x + 10, y: logoView.center.y))
+
+        logoView.layer.add(animation, forKey: "position")
     }
 }
 
@@ -259,6 +312,10 @@ private extension LoginViewController {
             return
         }
         APIManager.shared.authInfo = authInfo
+        UserDataPersistance.saveUserData(for: user)
+        if rememberMeButton.isSelected {
+            AuthInfoPersistance.saveCredentials()
+        }
         SVProgressHUD.showSuccess(withStatus: Constants.AlertMessages.loginSuccesful)
         navigate(to: .home)
     }
@@ -272,11 +329,11 @@ private extension LoginViewController {
     }
     
     func handleFailedResponse(_ data: Data?, defaultValue: String) {
+        animateFailedResponse()
         let errors = ErrorDecoder.decode(from: data, defaultValue: defaultValue)
         for error in errors {
             SVProgressHUD.showError(withStatus: error)
         }
-
     }
 }
 

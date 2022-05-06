@@ -69,9 +69,32 @@ private extension ShowsViewController {
     }
 
     func createRightNavigationButton() -> UIBarButtonItem {
-            let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-            rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
-            return rightNavigationButton
+        let rightNavigationButton = UIButton(type: .custom)
+        rightNavigationButton.frame = CGRect(x: 0.0, y: 0.0, width: 20, height: 20)
+        rightNavigationButton.setImage(UIImage(named:"userIcon"), for: .normal)
+        rightNavigationButton.addTarget(self, action: #selector(userButtonClicked(sender:)), for: UIControl.Event.touchUpInside)
+
+        let rightNavigationButtonItem = UIBarButtonItem(customView: rightNavigationButton)
+        let currentWidth = rightNavigationButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currentWidth?.isActive = true
+        let currentHeight = rightNavigationButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currentHeight?.isActive = true
+
+        return rightNavigationButtonItem
+    }
+
+
+    @objc func userButtonClicked(sender: UIButton){
+        let logoutViewController = instantiateLogoutViewController()
+        logoutViewController.user = UserDataPersistance.loadUserData()
+
+        let navigationController = UINavigationController(rootViewController: logoutViewController)
+        present(navigationController, animated: true)
+    }
+
+    func instantiateLogoutViewController() -> LogoutViewController {
+        let storyboard = UIStoryboard(name: "Logout", bundle: .main)
+        return storyboard.instantiateViewController(withIdentifier: "LogoutViewController") as! LogoutViewController
     }
 }
 
@@ -104,7 +127,6 @@ private extension ShowsViewController {
     func hideBackButton() {
         navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.setViewControllers([self], animated: true)
-        navigationController?.navigationBar.barTintColor = .red
     }
     
     func addRightNavigationButton() {

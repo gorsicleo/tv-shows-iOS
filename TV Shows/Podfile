@@ -9,4 +9,7 @@ target 'TV Shows' do
   pod 'SVProgressHUD'
   pod 'Alamofire'
   pod 'Kingfisher'
+  pod 'KeychainAccess', '~> 4.2'
+  pod 'RxSwift', '~> 6.5'
+  pod 'RxCocoa', '~> 6.5'
 end
