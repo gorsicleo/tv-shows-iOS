@@ -200,12 +200,12 @@ private extension LoginViewController {
             withDuration: 0.5,
             delay: 0,
             options: []
-        ) {
-            self.loginButton.alpha = 1
-            self.registerButton.alpha = 1
+        ) { [unowned self] in
+            loginButton.alpha = 1
+            registerButton.alpha = 1
 
-            self.loginButton.transform = CGAffineTransform.identity
-            self.registerButton.transform = CGAffineTransform.identity
+            loginButton.transform = CGAffineTransform.identity
+            registerButton.transform = CGAffineTransform.identity
         }
     }
 

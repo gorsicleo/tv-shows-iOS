@@ -149,7 +149,7 @@ extension LogoutViewController: UIImagePickerControllerDelegate, UINavigationCon
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
-        AlertService.showAlert(style: .actionSheet, title: "Choose your image", message: nil, actions: [photoLibraryAction, cameraAction, cancelAction], completion: nil)
+        showAlert(style: .actionSheet, title: "Choose your image", message: nil, actions: [photoLibraryAction, cameraAction, cancelAction], completion: nil)
     }
 
     func showImagePickerController(sourceType: UIImagePickerController.SourceType) {

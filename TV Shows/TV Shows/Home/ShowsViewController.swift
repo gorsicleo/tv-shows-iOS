@@ -74,11 +74,11 @@ private extension ShowsViewController {
         rightNavigationButton.setImage(UIImage(named:"userIcon"), for: .normal)
         rightNavigationButton.addTarget(self, action: #selector(userButtonClicked(sender:)), for: UIControl.Event.touchUpInside)
 
-            let rightNavigationButtonItem = UIBarButtonItem(customView: rightNavigationButton)
-            let currWidth = rightNavigationButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24)
-            currWidth?.isActive = true
-            let currHeight = rightNavigationButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24)
-            currHeight?.isActive = true
+        let rightNavigationButtonItem = UIBarButtonItem(customView: rightNavigationButton)
+        let currentWidth = rightNavigationButtonItem.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currentWidth?.isActive = true
+        let currentHeight = rightNavigationButtonItem.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currentHeight?.isActive = true
 
         return rightNavigationButtonItem
     }

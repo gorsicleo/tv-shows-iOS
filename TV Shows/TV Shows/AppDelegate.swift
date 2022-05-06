@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow(frame: UIScreen.main.bounds)
 
         let authInfo = AuthInfoPersistance.loadCredentials()
         let isBiometricsRequired = BiometricAuthInfoPersistance.getBiometricLoginFlag()
@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             navigate(to: .login)
         }
 
-        self.window?.makeKeyAndVisible()
+        window?.makeKeyAndVisible()
         return true
     }
 }
@@ -50,13 +50,13 @@ private extension AppDelegate {
             let storyboard = UIStoryboard(name: "Login", bundle: .main)
             let mainView = storyboard.instantiateViewController(withIdentifier: "Login") as! LoginViewController
             nav1.viewControllers = [mainView]
-            self.window!.rootViewController = nav1
+            window!.rootViewController = nav1
 
         case .home:
             let storyboard = UIStoryboard(name: "Home", bundle: .main)
             let homeViewController = storyboard.instantiateViewController(withIdentifier: "TabBarController")
             nav1.viewControllers = [homeViewController]
-            self.window!.rootViewController = nav1
+            window!.rootViewController = nav1
         }
     }
 }
