@@ -25,4 +25,14 @@ enum Constants {
         static let disabledMainColor = UIColor(rgb: 0xaf4141)
         static let disabledTitleColor = UIColor(rgb: 0xc4c4c4)
     }
+    
+    // MARK: - Alert messages -
+    
+    enum AlertMessages {
+        static let loginFailed = "Login failed: Please check your email and password."
+        static let loginSuccesful = "Login successful"
+        static let resgisterSuccesful = "Register success. Log in to continue."
+        static let registerFailed = "Registration failed. Please use different email."
+        static let missingHeaders = "Missing headers"
+    }
 }

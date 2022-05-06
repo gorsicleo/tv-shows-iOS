@@ -22,15 +22,10 @@ final class CustomButton: UIButton {
     
     override var isEnabled: Bool {
         didSet {
-            if isEnabled {
-                if let color = defaultBackgroundColor {
-                    self.backgroundColor = color
-                }
-            }
-            else {
-                if let color = disabledBackgroundColor {
-                    self.backgroundColor = color
-                }
+            if isEnabled, let color = defaultBackgroundColor {
+                backgroundColor = color
+            } else if let color = disabledBackgroundColor{
+                backgroundColor = color
             }
         }
     }
