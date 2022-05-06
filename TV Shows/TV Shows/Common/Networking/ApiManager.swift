@@ -52,6 +52,20 @@ final class APIManager {
         }
 }
 
+final class ErrorDecoder {
+
+    static func decode(from response: Data?, defaultValue: String) -> [String] {
+            guard let response = response else { return [] }
+            let decoder = JSONDecoder()
+            do {
+                let error = try decoder.decode(APIError.self, from: response)
+                return error.errors ?? [defaultValue]
+            } catch {
+                return [defaultValue]
+            }
+        }
+}
+
 struct AuthInfo: Codable {
 
     let accessToken: String

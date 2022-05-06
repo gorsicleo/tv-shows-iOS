@@ -7,8 +7,11 @@
 
 import UIKit
 import Alamofire
-import Kingfisher
 import SVProgressHUD
+
+enum HomeNavigationOption {
+    case showDetails
+}
 
 final class ShowsViewController : UIViewController {
     
@@ -16,11 +19,7 @@ final class ShowsViewController : UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     
-    lazy private var userButton: UIBarButtonItem = {
-        let userButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        userButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
-        return userButton
-    }()
+    lazy private var rightNavigationButton: UIBarButtonItem = createRightNavigationButton()
     
     private var networkCallInProgress = false
     private var currentPage = 1
@@ -33,12 +32,13 @@ final class ShowsViewController : UIViewController {
         }
     }
     
-    // MARK: - ViewController Life Cycle
+    // MARK: - ViewController Life Cycle -
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpTableView()
         setUpUI()
+        setUpRefreshControl()
         fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
     }
     
@@ -51,10 +51,27 @@ final class ShowsViewController : UIViewController {
 // MARK: - Extensions -
 
 private extension ShowsViewController {
+
+    func setUpRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refreshHandler), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+
+    @objc func refreshHandler() {
+        fetchShowsFromAPI(router: Router.shows(items: numberOfShowsPerPage, page: currentPage))
+        tableView.refreshControl?.endRefreshing()
+    }
     
     func setUpNavigationBar() {
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
+    func createRightNavigationButton() -> UIBarButtonItem {
+            let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+            rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
+            return rightNavigationButton
     }
 }
 
@@ -80,21 +97,19 @@ private extension ShowsViewController {
     
     func setUpUI() {
         colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
-        hidebackButton()
+        hideBackButton()
         addRightNavigationButton()
     }
     
-    func hidebackButton() {
+    func hideBackButton() {
         navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.setViewControllers([self], animated: true)
         navigationController?.navigationBar.barTintColor = .red
     }
     
     func addRightNavigationButton() {
-        navigationItem.rightBarButtonItem = userButton
+        navigationItem.rightBarButtonItem = rightNavigationButton
     }
-    
-    
 }
 
 // MARK: - API Call -
@@ -114,9 +129,8 @@ private extension ShowsViewController {
                         self.handleSuccess(shows: payload.shows)
                         self.numberOfPages = payload.meta.pagination.pages
                         break
-                        
-                    case .failure(let error) :
-                        self.handleFailure(error: error)
+                    case .failure :
+                        self.handleFailure()
                         break
                     }
                 }
@@ -139,7 +153,7 @@ private extension ShowsViewController {
         tableView.tableFooterView = nil
     }
     
-    func handleFailure(error: AFError) {
+    func handleFailure() {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
@@ -147,10 +161,11 @@ private extension ShowsViewController {
 // MARK: - Table View delegates -
 
 extension ShowsViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let show = listOfShows[indexPath.row]
-        print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
+        navigate(to: .showDetails, with: show)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
@@ -175,6 +190,21 @@ extension ShowsViewController: UIScrollViewDelegate {
                 frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 100)
             )
             fetchShowsFromAPI(router: .shows(items: numberOfShowsPerPage, page: currentPage))
+        }
+    }
+}
+
+// MARK: - Navigation -
+
+extension ShowsViewController {
+
+    func navigate(to navigationOption: HomeNavigationOption, with show: Show) {
+        switch navigationOption {
+        case .showDetails:
+            let storyboard = UIStoryboard(name: "ShowDetails", bundle: .main)
+            let showDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
+            showDetailsViewController.show = show
+            navigationController?.pushViewController(showDetailsViewController, animated: true)
         }
     }
 }

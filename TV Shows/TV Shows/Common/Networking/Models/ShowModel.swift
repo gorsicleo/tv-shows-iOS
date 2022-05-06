@@ -13,12 +13,16 @@ struct Show: Decodable {
     let description: String?
     let imageURL: String?
     let title: String
+    let averageRating: Int?
+    let numberOfReviews: Int
     
     enum CodingKeys: String, CodingKey {
         case id
         case description
         case imageURL = "image_url"
         case title
+        case averageRating = "average_rating"
+        case numberOfReviews = "no_of_reviews"
     }
 }
 

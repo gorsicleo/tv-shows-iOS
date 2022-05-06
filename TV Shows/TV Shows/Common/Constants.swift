@@ -21,6 +21,7 @@ enum Constants {
     // MARK: - Colors-
     
     enum Colors {
+        static let textViewBacgroundColor = UIColor(rgb: 0xf2f2f2)
         static let mainRedColor = UIColor(rgb: 0x800000)
         static let disabledMainColor = UIColor(rgb: 0xaf4141)
         static let disabledTitleColor = UIColor(rgb: 0xc4c4c4)
@@ -30,10 +31,8 @@ enum Constants {
     // MARK: - Alert messages -
     
     enum AlertMessages {
-        static let loginFailed = "Login failed: Please check your email and password."
         static let loginSuccesful = "Login successful"
         static let resgisterSuccesful = "Register success. Log in to continue."
-        static let registerFailed = "Registration failed. Please use different email."
         static let missingHeaders = "Missing headers"
         static let networkError = "Can't connect to the server. Please check your connection"
     }

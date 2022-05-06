@@ -14,20 +14,9 @@ final class TopRatedViewController : UIViewController {
     // MARK: - Private properties -
     
     @IBOutlet private weak var tableView: UITableView!
-    lazy private var userButton: UIBarButtonItem = {
-        let userButton = UIBarButtonItem(
-            title: "",
-            style: .plain,
-            target: self,
-            action: nil
-        )
-        userButton.setBackgroundImage(
-            UIImage(named: "userIcon"),
-            for: .normal,
-            barMetrics: .default
-        )
-        return userButton
-    }()
+    lazy private var rightNavigationButton: UIBarButtonItem = createRightNavigationButton()
+
+    // MARK: - Public properties -
     
     var listOfShows: [Show] = [] {
         didSet {
@@ -39,19 +28,15 @@ final class TopRatedViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
-        tableView.register(cellNib, forCellReuseIdentifier: "ShowTitleTableViewCell")
-        fetchShowsFromAPI(router: Router.topRated)
+        setUpTableView()
         setUpUI()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+        setUpRefreshControl()
+        fetchShowsFromAPI(router: .topRated)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
+        setUpNavigationBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -63,11 +48,33 @@ final class TopRatedViewController : UIViewController {
 // MARK: - Extensions -
 
 private extension TopRatedViewController {
+
+    func setUpRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:  #selector(refreshHandler), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+
+    @objc func refreshHandler() {
+        fetchShowsFromAPI(router: .topRated)
+        tableView.refreshControl?.endRefreshing()
+    }
     
     // MARK: - Setup UI -
+
+    func createRightNavigationButton() -> UIBarButtonItem {
+            let rightNavigationButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+            rightNavigationButton.setBackgroundImage(UIImage(named: "userIcon"), for: .normal, barMetrics: .default)
+            return rightNavigationButton
+    }
+
+    func setUpNavigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
+    }
     
     func setUpUI() {
-        colorNavigationBar(color: Constants.Colors.navigationBarLightGray)
         hidebackButton()
         addUserIcon()
     }
@@ -78,7 +85,23 @@ private extension TopRatedViewController {
     }
     
     func addUserIcon() {
-        navigationItem.rightBarButtonItem = userButton
+        navigationItem.rightBarButtonItem = rightNavigationButton
+    }
+}
+
+// MARK: - Setup Table View -
+
+private extension TopRatedViewController {
+
+    func setUpTableView() {
+        registerCells()
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+
+    func registerCells() {
+        let cellNib = UINib(nibName: "ShowTitleTableViewCell", bundle: nil)
+        tableView.register(cellNib, forCellReuseIdentifier: "ShowTitleTableViewCell")
     }
 }
 
@@ -98,8 +121,8 @@ private extension TopRatedViewController {
                         self.handleSuccess(shows: payload.shows)
                         break
                     
-                    case .failure(let error) :
-                        self.handleFailure(error: error)
+                    case .failure :
+                        self.handleFailure()
                         break
                     }
         }
@@ -112,7 +135,7 @@ private extension TopRatedViewController {
         listOfShows.append(contentsOf: shows)
     }
     
-    func handleFailure(error: AFError) {
+    func handleFailure() {
         SVProgressHUD.showError(withStatus: Constants.AlertMessages.networkError)
     }
 }
@@ -123,19 +146,35 @@ extension TopRatedViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let show = listOfShows[indexPath.row]
-        print("Yout tapped show with id: " + show.id + " <<::>> " + show.title)
+        navigate(to: .showDetails, with: show)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
 
 extension TopRatedViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        listOfShows.count
+        return listOfShows.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ShowTitleTableViewCell", for: indexPath) as! ShowTitleTableViewCell
         cell.setUpCellUI(for: listOfShows[indexPath.row])
         return cell
+    }
+}
+
+// MARK: - Navigation -
+
+extension TopRatedViewController {
+
+    func navigate(to navigationOption: HomeNavigationOption, with show: Show) {
+        switch navigationOption {
+        case .showDetails:
+            let storyboard = UIStoryboard(name: "ShowDetails", bundle: .main)
+            let showDetailsViewController = storyboard.instantiateViewController(withIdentifier: "ShowDetailsViewController") as! ShowDetailsViewController
+            showDetailsViewController.show = show
+            navigationController?.pushViewController(showDetailsViewController, animated: true)
+        }
     }
 }

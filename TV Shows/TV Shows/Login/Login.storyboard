@@ -231,6 +231,9 @@
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                 <state key="normal" title="Register"/>
+                                                                <connections>
+                                                                    <action selector="registerButtonAction:" destination="DlN-OE-Wv6" eventType="touchUpInside" id="ON2-MS-Rdl"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -282,6 +285,7 @@
                         <outlet property="passwordVisibilityButton" destination="F4J-Ob-Prz" id="Oyh-7L-wd4"/>
                         <outlet property="registerButton" destination="iQX-Ym-9zV" id="1WP-ny-fzS"/>
                         <outlet property="rememberMeButton" destination="eYj-IE-dQ7" id="Yha-E9-dWm"/>
+                        <outlet property="scrollView" destination="Can-h5-VBU" id="evt-R9-qDO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ydh-fE-2rH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
