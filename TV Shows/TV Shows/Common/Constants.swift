@@ -24,6 +24,7 @@ enum Constants {
         static let mainRedColor = UIColor(rgb: 0x800000)
         static let disabledMainColor = UIColor(rgb: 0xaf4141)
         static let disabledTitleColor = UIColor(rgb: 0xc4c4c4)
+        static let navigationBarLightGray = UIColor(displayP3Red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
     }
     
     // MARK: - Alert messages -
@@ -34,5 +35,12 @@ enum Constants {
         static let resgisterSuccesful = "Register success. Log in to continue."
         static let registerFailed = "Registration failed. Please use different email."
         static let missingHeaders = "Missing headers"
+        static let networkError = "Can't connect to the server. Please check your connection"
+    }
+    
+    // MARK: - URL-s -
+    
+    enum CommonURL {
+        static let errorImageURL = "https://www.iconpacks.net/icons/1/free-error-icon-905-thumb.png"
     }
 }
